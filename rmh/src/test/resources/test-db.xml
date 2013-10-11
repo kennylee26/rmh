@@ -9,7 +9,8 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd" default-autowire="byName">
 
-	<!-- Scans within the base package of the application for @Components to configure as beans -->
+	<!-- Scans within the base package of the application for @Components to 
+		configure as beans -->
 	<bean id="placeholderConfig"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location" value="classpath:db.properties" />
@@ -20,24 +21,39 @@
 		<property name="jpaVendorAdapter">
 			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
 				<property name="showSql" value="true" />
-				<property name="generateDdl" value="true" />
+				<property name="generateDdl" value="false" />
 				<property name="databasePlatform" value="${db.dialect}" />
 			</bean>
-		</property>		
+		</property>
 	</bean>
 
-	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+	<!-- <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" 
+		destroy-method="close"> <property name="driverClassName" value="${db.driver}" 
+		/> <property name="url" value="${db.url}" /> <property name="username" value="${db.username}" 
+		/> <property name="password" value="${db.password}" /> </bean> -->
+
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
 		destroy-method="close">
-		<property name="driverClassName" value="${db.driver}" />
-		<property name="url" value="${db.url}" />
-		<property name="username" value="${db.username}" />
+		<property name="driverClass" value="${db.driver}" />
+		<property name="jdbcUrl" value="${db.url}" />
+		<property name="user" value="${db.username}" />
 		<property name="password" value="${db.password}" />
+		<property name="minPoolSize" value="${c3p0.minPoolSize}" />
+		<property name="maxPoolSize" value="${c3p0.maxPoolSize}" />
+		<property name="initialPoolSize" value="${c3p0.initialPoolSize}" />
 	</bean>
-
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-
+		<!-- 注入datasource -->
+		<property name="dataSource" ref="dataSource" />
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
-	
+
+	<!-- Scans within the base package of the application for @Repository to 
+		configure as beans -->
+	<context:component-scan base-package="cn.com.timekey.rmh">
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Repository" />
+	</context:component-scan>
 
 
 	<tx:annotation-driven />

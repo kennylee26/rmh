@@ -1,4 +1,4 @@
-package cn.com.timekey.rmh;
+package cn.com.timekey.rmh.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

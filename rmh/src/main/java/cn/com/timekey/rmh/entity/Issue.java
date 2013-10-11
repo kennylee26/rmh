@@ -1,4 +1,4 @@
-package cn.com.timekey.rmh.repository.entity;
+package cn.com.timekey.rmh.entity;
 
 import java.io.Serializable;
 import javax.persistence.*;

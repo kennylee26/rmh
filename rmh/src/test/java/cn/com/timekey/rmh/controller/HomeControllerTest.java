@@ -1,4 +1,4 @@
-package cn.com.timekey.rmh;
+package cn.com.timekey.rmh.controller;
 
 import junit.framework.Assert;
 

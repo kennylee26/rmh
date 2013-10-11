@@ -1,45 +1,44 @@
-package cn.com.timekey.rmh.repository.entity;
+package cn.com.timekey.rmh.entity;
 
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
-
 
 /**
  * The persistent class for the users database table.
  * 
  */
 @Entity
-@Table(name="users")
-@NamedQuery(name="User.findAll", query="SELECT u FROM User u")
+@Table(name = "users")
+@NamedQuery(name = "User.findAll", query = "SELECT u FROM User u")
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int id;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer id;
 
 	private byte admin;
 
-	@Column(name="auth_source_id")
-	private int authSourceId;
+	@Column(name = "auth_source_id")
+	private Integer authSourceId;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="created_on")
+	@Column(name = "created_on")
 	private Date createdOn;
 
 	private String firstname;
 
-	@Column(name="hashed_password")
+	@Column(name = "hashed_password")
 	private String hashedPassword;
 
-	@Column(name="identity_url")
+	@Column(name = "identity_url")
 	private String identityUrl;
 
 	private String language;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="last_login_on")
+	@Column(name = "last_login_on")
 	private Date lastLoginOn;
 
 	private String lastname;
@@ -48,27 +47,27 @@ public class User implements Serializable {
 
 	private String mail;
 
-	@Column(name="mail_notification")
+	@Column(name = "mail_notification")
 	private String mailNotification;
 
 	private String salt;
 
-	private int status;
+	private Integer status;
 
 	private String type;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="updated_on")
+	@Column(name = "updated_on")
 	private Date updatedOn;
 
 	public User() {
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -80,11 +79,11 @@ public class User implements Serializable {
 		this.admin = admin;
 	}
 
-	public int getAuthSourceId() {
+	public Integer getAuthSourceId() {
 		return this.authSourceId;
 	}
 
-	public void setAuthSourceId(int authSourceId) {
+	public void setAuthSourceId(Integer authSourceId) {
 		this.authSourceId = authSourceId;
 	}
 
@@ -176,11 +175,11 @@ public class User implements Serializable {
 		this.salt = salt;
 	}
 
-	public int getStatus() {
+	public Integer getStatus() {
 		return this.status;
 	}
 
-	public void setStatus(int status) {
+	public void setStatus(Integer status) {
 		this.status = status;
 	}
 
@@ -198,6 +197,23 @@ public class User implements Serializable {
 
 	public void setUpdatedOn(Date updatedOn) {
 		this.updatedOn = updatedOn;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", admin=" + admin + ", authSourceId="
+				+ authSourceId + ", createdOn=" + createdOn + ", firstname="
+				+ firstname + ", hashedPassword=" + hashedPassword
+				+ ", identityUrl=" + identityUrl + ", language=" + language
+				+ ", lastLoginOn=" + lastLoginOn + ", lastname=" + lastname
+				+ ", login=" + login + ", mail=" + mail + ", mailNotification="
+				+ mailNotification + ", salt=" + salt + ", status=" + status
+				+ ", type=" + type + ", updatedOn=" + updatedOn + "]";
 	}
 
 }

@@ -7,7 +7,7 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-	<!-- Scans within the base package of the application for @Components to 
+	<!-- Scans within the base package of the application for @Controller to 
 		configure as beans -->
 	<context:component-scan base-package="cn.com.timekey.rmh" />
 
@@ -15,7 +15,7 @@
 	<mvc:annotation-driven />
 
 	<mvc:resources mapping="/resources/**" location="/resources/" />
-	
+
 	<bean id="validator"
 		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
 
