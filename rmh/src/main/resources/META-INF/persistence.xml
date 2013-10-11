@@ -6,8 +6,13 @@
 	version="1.0">
 
 	<persistence-unit name="acme" transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<class>cn.com.timekey.rmh.repository.entity.Issue</class>
+		<class>cn.com.timekey.rmh.repository.entity.User</class>
+		<class>cn.com.timekey.rmh.repository.entity.CustomField</class>
+		<class>cn.com.timekey.rmh.repository.entity.CustomValue</class>
 		<properties>
-			<property name="hibernate.hbm2ddl.auto" value="create-drop" />
+			<property name="hibernate.hbm2ddl.auto" value="none" />
 			<property name="hibernate.show_sql" value="true" />
 			<property name="hibernate.transaction.flush_before_completion"
 				value="true" />
