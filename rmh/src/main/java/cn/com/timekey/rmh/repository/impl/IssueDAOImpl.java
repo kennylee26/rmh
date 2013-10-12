@@ -5,7 +5,9 @@
 package cn.com.timekey.rmh.repository.impl;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
@@ -16,6 +18,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.orm.jpa.EntityManagerFactoryUtils;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 import cn.com.timekey.rmh.entity.Issue;
 import cn.com.timekey.rmh.repository.IssueDAO;
@@ -45,33 +48,32 @@ public class IssueDAOImpl implements IssueDAO {
 	public List<Issue> findResponsibleIssues(int userId, Date begin, Date end,
 			List<Integer> statusIds) {
 		logger.debug("IssueDAOImpl.findResponsibleIssues()");
+		Map<String, Object> parameters = new HashMap<String, Object>();
 		EntityManager em = EntityManagerFactoryUtils
 				.getTransactionalEntityManager(emf);
 		String qlString = "";
-		// TODO 初步完成，但还要过滤父级任务。
-		qlString += "SELECT i FROM Issue i, CustomValue cv where i.id = cv.customizedId AND cv.customFieldId=6 AND i.estimatedHours !=null ";
+		qlString += "SELECT i FROM Issue i, CustomValue cv where i.id = cv.customizedId AND cv.customFieldId=6 AND i.estimatedHours !=null AND i.startDate!=null AND i.dueDate!=null";
 		qlString += " AND cv.value=:userId ";
+		parameters.put("userId", String.valueOf(userId));
 		if (begin != null) {
 			qlString += " AND i.startDate >= :begin";
+			parameters.put("begin", begin);
 		}
 		if (end != null) {
 			qlString += " AND i.dueDate < :end";
+			parameters.put("end", end);
 		}
 		if (statusIds != null) {
 			qlString += " AND i.statusId in ( :statusIds ) ";
+			parameters.put("statusIds", statusIds);
 		}
+		qlString += " AND NOT EXISTS ( FROM Issue t WHERE t.parentId = i.id) ";
+		qlString += " AND i.trackerId NOT IN (16,17,18) ";
 		Query query = em.createQuery(qlString);
-		query.setParameter("userId", String.valueOf(userId));
-		if (begin != null) {
-			logger.info("begin: " + begin);
-			query.setParameter("begin", begin);
-		}
-		if (end != null) {
-			logger.info("end: " + end);
-			query.setParameter("end", end);
-		}
-		if (statusIds != null) {
-			query.setParameter("statusIds", statusIds);
+		if (CollectionUtils.isEmpty(parameters) == false) {
+			for (Map.Entry<String, Object> e : parameters.entrySet()) {
+				query.setParameter(e.getKey(), e.getValue());
+			}
 		}
 		@SuppressWarnings("unchecked")
 		List<Issue> l = query.getResultList();
