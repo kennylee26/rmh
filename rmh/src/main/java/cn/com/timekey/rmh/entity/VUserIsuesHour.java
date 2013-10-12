@@ -19,12 +19,12 @@ public class VUserIsuesHour implements Serializable {
 	@Column(name = "isues_hours")
 	private double isuesHours;
 
-	private int month;
+	private Integer month;
 
 	@Column(name = "user_name")
 	private String userName;
 
-	private int year;
+	private Integer year;
 
 	private User user;
 
@@ -35,7 +35,7 @@ public class VUserIsuesHour implements Serializable {
 	 * 创建一个新的实例 VUserIsuesHour.
 	 * 
 	 */
-	public VUserIsuesHour(String userName, int year, int month,
+	public VUserIsuesHour(String userName, Integer year, Integer month,
 			double isuesHours) {
 		super();
 		this.isuesHours = isuesHours;
@@ -52,11 +52,11 @@ public class VUserIsuesHour implements Serializable {
 		this.isuesHours = isuesHours;
 	}
 
-	public int getMonth() {
+	public Integer getMonth() {
 		return this.month;
 	}
 
-	public void setMonth(int month) {
+	public void setMonth(Integer month) {
 		this.month = month;
 	}
 
@@ -68,11 +68,11 @@ public class VUserIsuesHour implements Serializable {
 		this.userName = userName;
 	}
 
-	public int getYear() {
+	public Integer getYear() {
 		return this.year;
 	}
 
-	public void setYear(int year) {
+	public void setYear(Integer year) {
 		this.year = year;
 	}
 

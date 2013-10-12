@@ -72,18 +72,29 @@ public class VUserIsuesHourDAOImpl implements VUserIsuesHourDAO {
 				}
 			}
 
+			// user name
 			if (example.getUserName() != null) {
 				queryString += " AND user_name=? ";
-				parameters.put(1, example.getUserName());
+				parameters.put(parameters.size(), example.getUserName());
 			} else {
 				queryString += " AND user_name is null ";
+			}
+			// year
+			if (example.getYear() != null) {
+				queryString += " AND year=? ";
+				parameters.put(parameters.size(), example.getYear());
+			}
+			// month
+			if (example.getMonth() != null) {
+				queryString += " AND month=? ";
+				parameters.put(parameters.size(), example.getMonth());
 			}
 		}
 		queryString += " ORDER BY year desc, month desc ";
 		Query query = em.createNativeQuery(queryString);
 		if (CollectionUtils.isEmpty(parameters) == false) {
 			for (Map.Entry<Integer, Object> entry : parameters.entrySet()) {
-				query.setParameter(entry.getKey(), entry.getValue());
+				query.setParameter(entry.getKey() + 1, entry.getValue());
 			}
 		}
 		List<?> r = query.getResultList();
