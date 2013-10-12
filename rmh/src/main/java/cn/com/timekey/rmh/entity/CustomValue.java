@@ -16,13 +16,13 @@ public class CustomValue implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int id;
+	private Integer id;
 
 	@Column(name="custom_field_id")
-	private int customFieldId;
+	private Integer customFieldId;
 
 	@Column(name="customized_id")
-	private int customizedId;
+	private Integer customizedId;
 
 	@Column(name="customized_type")
 	private String customizedType;
@@ -33,27 +33,27 @@ public class CustomValue implements Serializable {
 	public CustomValue() {
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
-	public int getCustomFieldId() {
+	public Integer getCustomFieldId() {
 		return this.customFieldId;
 	}
 
-	public void setCustomFieldId(int customFieldId) {
+	public void setCustomFieldId(Integer customFieldId) {
 		this.customFieldId = customFieldId;
 	}
 
-	public int getCustomizedId() {
+	public Integer getCustomizedId() {
 		return this.customizedId;
 	}
 
-	public void setCustomizedId(int customizedId) {
+	public void setCustomizedId(Integer customizedId) {
 		this.customizedId = customizedId;
 	}
 

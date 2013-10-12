@@ -4,123 +4,122 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
 
-
 /**
  * The persistent class for the issues database table.
  * 
  */
 @Entity
-@Table(name="issues")
-@NamedQuery(name="Issue.findAll", query="SELECT i FROM Issue i")
+@Table(name = "issues")
+@NamedQuery(name = "Issue.findAll", query = "SELECT i FROM Issue i")
 public class Issue implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int id;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer id;
 
-	@Column(name="assigned_to_id")
-	private int assignedToId;
+	@Column(name = "assigned_to_id")
+	private Integer assignedToId;
 
-	@Column(name="author_id")
-	private int authorId;
+	@Column(name = "author_id")
+	private Integer authorId;
 
-	@Column(name="category_id")
-	private int categoryId;
+	@Column(name = "category_id")
+	private Integer categoryId;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="created_on")
+	@Column(name = "created_on")
 	private Date createdOn;
 
 	@Lob
 	private String description;
 
-	@Column(name="done_ratio")
-	private int doneRatio;
+	@Column(name = "done_ratio")
+	private Integer doneRatio;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="due_date")
+	@Column(name = "due_date")
 	private Date dueDate;
 
-	@Column(name="estimated_hours")
-	private float estimatedHours;
+	@Column(name = "estimated_hours")
+	private Float estimatedHours;
 
-	@Column(name="fixed_version_id")
-	private int fixedVersionId;
+	@Column(name = "fixed_version_id")
+	private Integer fixedVersionId;
 
-	@Column(name="is_private")
+	@Column(name = "is_private")
 	private byte isPrivate;
 
-	private int lft;
+	private Integer lft;
 
-	@Column(name="lock_version")
-	private int lockVersion;
+	@Column(name = "lock_version")
+	private Integer lockVersion;
 
-	@Column(name="parent_id")
-	private int parentId;
+	@Column(name = "parent_id")
+	private Integer parentId;
 
-	@Column(name="priority_id")
-	private int priorityId;
+	@Column(name = "priority_id")
+	private Integer priorityId;
 
-	@Column(name="project_id")
-	private int projectId;
+	@Column(name = "project_id")
+	private Integer projectId;
 
-	private int rgt;
+	private Integer rgt;
 
-	@Column(name="root_id")
-	private int rootId;
+	@Column(name = "root_id")
+	private Integer rootId;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="start_date")
+	@Column(name = "start_date")
 	private Date startDate;
 
-	@Column(name="status_id")
-	private int statusId;
+	@Column(name = "status_id")
+	private Integer statusId;
 
 	private String subject;
 
-	@Column(name="tracker_id")
-	private int trackerId;
+	@Column(name = "tracker_id")
+	private Integer trackerId;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="updated_on")
+	@Column(name = "updated_on")
 	private Date updatedOn;
 
-	@Column(name="user_story_id")
-	private int userStoryId;
+	@Column(name = "user_story_id")
+	private Integer userStoryId;
 
 	public Issue() {
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
-	public int getAssignedToId() {
+	public Integer getAssignedToId() {
 		return this.assignedToId;
 	}
 
-	public void setAssignedToId(int assignedToId) {
+	public void setAssignedToId(Integer assignedToId) {
 		this.assignedToId = assignedToId;
 	}
 
-	public int getAuthorId() {
+	public Integer getAuthorId() {
 		return this.authorId;
 	}
 
-	public void setAuthorId(int authorId) {
+	public void setAuthorId(Integer authorId) {
 		this.authorId = authorId;
 	}
 
-	public int getCategoryId() {
+	public Integer getCategoryId() {
 		return this.categoryId;
 	}
 
-	public void setCategoryId(int categoryId) {
+	public void setCategoryId(Integer categoryId) {
 		this.categoryId = categoryId;
 	}
 
@@ -140,11 +139,11 @@ public class Issue implements Serializable {
 		this.description = description;
 	}
 
-	public int getDoneRatio() {
+	public Integer getDoneRatio() {
 		return this.doneRatio;
 	}
 
-	public void setDoneRatio(int doneRatio) {
+	public void setDoneRatio(Integer doneRatio) {
 		this.doneRatio = doneRatio;
 	}
 
@@ -156,19 +155,19 @@ public class Issue implements Serializable {
 		this.dueDate = dueDate;
 	}
 
-	public float getEstimatedHours() {
+	public Float getEstimatedHours() {
 		return this.estimatedHours;
 	}
 
-	public void setEstimatedHours(float estimatedHours) {
+	public void setEstimatedHours(Float estimatedHours) {
 		this.estimatedHours = estimatedHours;
 	}
 
-	public int getFixedVersionId() {
+	public Integer getFixedVersionId() {
 		return this.fixedVersionId;
 	}
 
-	public void setFixedVersionId(int fixedVersionId) {
+	public void setFixedVersionId(Integer fixedVersionId) {
 		this.fixedVersionId = fixedVersionId;
 	}
 
@@ -180,59 +179,59 @@ public class Issue implements Serializable {
 		this.isPrivate = isPrivate;
 	}
 
-	public int getLft() {
+	public Integer getLft() {
 		return this.lft;
 	}
 
-	public void setLft(int lft) {
+	public void setLft(Integer lft) {
 		this.lft = lft;
 	}
 
-	public int getLockVersion() {
+	public Integer getLockVersion() {
 		return this.lockVersion;
 	}
 
-	public void setLockVersion(int lockVersion) {
+	public void setLockVersion(Integer lockVersion) {
 		this.lockVersion = lockVersion;
 	}
 
-	public int getParentId() {
+	public Integer getParentId() {
 		return this.parentId;
 	}
 
-	public void setParentId(int parentId) {
+	public void setParentId(Integer parentId) {
 		this.parentId = parentId;
 	}
 
-	public int getPriorityId() {
+	public Integer getPriorityId() {
 		return this.priorityId;
 	}
 
-	public void setPriorityId(int priorityId) {
+	public void setPriorityId(Integer priorityId) {
 		this.priorityId = priorityId;
 	}
 
-	public int getProjectId() {
+	public Integer getProjectId() {
 		return this.projectId;
 	}
 
-	public void setProjectId(int projectId) {
+	public void setProjectId(Integer projectId) {
 		this.projectId = projectId;
 	}
 
-	public int getRgt() {
+	public Integer getRgt() {
 		return this.rgt;
 	}
 
-	public void setRgt(int rgt) {
+	public void setRgt(Integer rgt) {
 		this.rgt = rgt;
 	}
 
-	public int getRootId() {
+	public Integer getRootId() {
 		return this.rootId;
 	}
 
-	public void setRootId(int rootId) {
+	public void setRootId(Integer rootId) {
 		this.rootId = rootId;
 	}
 
@@ -244,11 +243,11 @@ public class Issue implements Serializable {
 		this.startDate = startDate;
 	}
 
-	public int getStatusId() {
+	public Integer getStatusId() {
 		return this.statusId;
 	}
 
-	public void setStatusId(int statusId) {
+	public void setStatusId(Integer statusId) {
 		this.statusId = statusId;
 	}
 
@@ -260,11 +259,11 @@ public class Issue implements Serializable {
 		this.subject = subject;
 	}
 
-	public int getTrackerId() {
+	public Integer getTrackerId() {
 		return this.trackerId;
 	}
 
-	public void setTrackerId(int trackerId) {
+	public void setTrackerId(Integer trackerId) {
 		this.trackerId = trackerId;
 	}
 
@@ -276,12 +275,33 @@ public class Issue implements Serializable {
 		this.updatedOn = updatedOn;
 	}
 
-	public int getUserStoryId() {
+	public Integer getUserStoryId() {
 		return this.userStoryId;
 	}
 
-	public void setUserStoryId(int userStoryId) {
+	public void setUserStoryId(Integer userStoryId) {
 		this.userStoryId = userStoryId;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Issue [id=" + id + ", assignedToId=" + assignedToId
+				+ ", authorId=" + authorId + ", categoryId=" + categoryId
+				+ ", createdOn=" + createdOn + ", description=" + description
+				+ ", doneRatio=" + doneRatio + ", dueDate=" + dueDate
+				+ ", estimatedHours=" + estimatedHours + ", fixedVersionId="
+				+ fixedVersionId + ", isPrivate=" + isPrivate + ", lft=" + lft
+				+ ", lockVersion=" + lockVersion + ", parentId=" + parentId
+				+ ", priorityId=" + priorityId + ", projectId=" + projectId
+				+ ", rgt=" + rgt + ", rootId=" + rootId + ", startDate="
+				+ startDate + ", statusId=" + statusId + ", subject=" + subject
+				+ ", trackerId=" + trackerId + ", updatedOn=" + updatedOn
+				+ ", userStoryId=" + userStoryId + "]";
 	}
 
 }

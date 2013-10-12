@@ -10,7 +10,7 @@ import cn.com.timekey.rmh.entity.VUserIsuesHour;
 
 /**
  * <b>类名称：</b>VUserIsuesHourDAO<br/>
- * <b>类描述：</b>VUserIsuesHourDAO的DAO接口<br/>
+ * <b>类描述：</b>VUserIsuesHourDAO的DAO接口，查询已完成的工时v_user_isues_hours_finished<br/>
  * <b>创建时间：</b>Oct 11, 2013 4:10:23 PM<br/>
  * <b>备注：</b><br/>
  * 

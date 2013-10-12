@@ -56,7 +56,7 @@ public class VUserIsuesHourDAOImpl implements VUserIsuesHourDAO {
 				.getTransactionalEntityManager(emf);
 		List<VUserIsuesHour> l = new ArrayList<VUserIsuesHour>();
 		Map<Integer, Object> parameters = null;
-		String queryString = "SELECT user_name,year,month,isues_hours FROM v_user_isues_hours ";
+		String queryString = "SELECT user_name,year,month,isues_hours FROM v_user_isues_hours_finished ";
 		User user = null;
 		if (example != null) {
 			parameters = new HashMap<Integer, Object>();

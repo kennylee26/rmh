@@ -16,7 +16,7 @@ public class CustomField implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int id;
+	private Integer id;
 
 	@Lob
 	@Column(name="default_value")
@@ -37,16 +37,16 @@ public class CustomField implements Serializable {
 	private byte isRequired;
 
 	@Column(name="max_length")
-	private int maxLength;
+	private Integer maxLength;
 
 	@Column(name="min_length")
-	private int minLength;
+	private Integer minLength;
 
 	private byte multiple;
 
 	private String name;
 
-	private int position;
+	private Integer position;
 
 	@Lob
 	@Column(name="possible_values")
@@ -63,11 +63,11 @@ public class CustomField implements Serializable {
 	public CustomField() {
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -119,19 +119,19 @@ public class CustomField implements Serializable {
 		this.isRequired = isRequired;
 	}
 
-	public int getMaxLength() {
+	public Integer getMaxLength() {
 		return this.maxLength;
 	}
 
-	public void setMaxLength(int maxLength) {
+	public void setMaxLength(Integer maxLength) {
 		this.maxLength = maxLength;
 	}
 
-	public int getMinLength() {
+	public Integer getMinLength() {
 		return this.minLength;
 	}
 
-	public void setMinLength(int minLength) {
+	public void setMinLength(Integer minLength) {
 		this.minLength = minLength;
 	}
 
@@ -151,11 +151,11 @@ public class CustomField implements Serializable {
 		this.name = name;
 	}
 
-	public int getPosition() {
+	public Integer getPosition() {
 		return this.position;
 	}
 
-	public void setPosition(int position) {
+	public void setPosition(Integer position) {
 		this.position = position;
 	}
 
