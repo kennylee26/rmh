@@ -6,6 +6,8 @@ package cn.com.timekey.rmh.service;
 
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import cn.com.timekey.rmh.entity.VUserIsuesHour;
 
 /**
@@ -17,6 +19,7 @@ import cn.com.timekey.rmh.entity.VUserIsuesHour;
  * @author kennylee <br />
  * @version 1.0.0<br/>
  */
+@Transactional
 public interface VUserIsuesHourService {
 
 	/**
@@ -27,6 +30,7 @@ public interface VUserIsuesHourService {
 	 * @param userId
 	 * @return
 	 */
+	@Transactional(readOnly = true)
 	public VUserIsuesHour findLast(int userId);
 
 	/**
@@ -37,8 +41,10 @@ public interface VUserIsuesHourService {
 	 * @param userId
 	 * @return
 	 */
+	@Transactional(readOnly = true)
 	public List<VUserIsuesHour> findCurrentYearInfo(int userId);
 
+	@Transactional(readOnly = true)
 	public List<VUserIsuesHour> findByExample(VUserIsuesHour example);
 
 }
