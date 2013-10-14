@@ -40,7 +40,7 @@ table td {
 							<td>项目</td>
 							<td>状态</td>
 							<td>标题</td>
-							<td>指派人</td>
+							<td>分配给</td>
 							<td>预期工时</td>
 							<!-- <td>更新时间</td> -->
 						</tr>

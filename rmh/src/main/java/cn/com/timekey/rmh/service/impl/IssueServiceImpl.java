@@ -4,6 +4,7 @@
  */
 package cn.com.timekey.rmh.service.impl;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -16,6 +17,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import cn.com.timekey.rmh.entity.Issue;
 import cn.com.timekey.rmh.entity.IssueStatus;
@@ -134,6 +136,29 @@ public class IssueServiceImpl implements IssueService {
 			// 为了避免查询已拒绝，无效的等无用状态。by kennylee 2013-10-14
 			issueStatuses = issueStatusDAO.findByIsClosed(false);
 			issueStatuses.add(IssueStatusEnum.CLOSED.getEntity());
+		}
+		issueStatuses = filterIgnoreStatus(issueStatuses);
+		return issueStatuses;
+	}
+
+	/**
+	 * <p>
+	 * 过滤掉需要忽略的状态
+	 * </p>
+	 * 
+	 * @param issueStatuses
+	 *            List of IssueStatus 原状态列表
+	 * @return List of IssueStatus 过滤后的状态列表。
+	 */
+	private List<IssueStatus> filterIgnoreStatus(List<IssueStatus> issueStatuses) {
+		if (CollectionUtils.isEmpty(issueStatuses) == false) {
+			List<IssueStatus> b = new ArrayList<IssueStatus>(issueStatuses);
+			issueStatuses = new ArrayList<IssueStatus>();
+			for (IssueStatus st : b) {
+				if (st.getId().equals(IssueStatusEnum.NEW.getId()) == false) {// 过滤新建状态
+					issueStatuses.add(st);
+				}
+			}
 		}
 		return issueStatuses;
 	}
