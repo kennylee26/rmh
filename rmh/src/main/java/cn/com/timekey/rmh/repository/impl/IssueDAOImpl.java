@@ -4,6 +4,7 @@
  */
 package cn.com.timekey.rmh.repository.impl;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
 import cn.com.timekey.rmh.entity.Issue;
+import cn.com.timekey.rmh.enums.TrackerEnum;
 import cn.com.timekey.rmh.repository.IssueDAO;
 
 /**
@@ -42,18 +44,60 @@ public class IssueDAOImpl implements IssueDAO {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see cn.com.timekey.rmh.repository.IssueDAO#findResponsibleIssues(int,
+	 * @see cn.com.timekey.rmh.repository.IssueDAO#findIssuesByResponsible(int,
 	 * java.util.Date, java.util.Date, java.util.List)
 	 */
-	public List<Issue> findResponsibleIssues(int userId, Date begin, Date end,
-			List<Integer> statusIds) {
+	public List<Issue> findIssuesByResponsible(int userId, Date begin,
+			Date end, List<Integer> statusIds) {
 		logger.debug("IssueDAOImpl.findResponsibleIssues()");
+		String projection = "i";
+		Query query = generateFindIssuesByRespQuery(userId, begin, end,
+				statusIds, projection);
+		@SuppressWarnings("unchecked")
+		List<Issue> l = query.getResultList();
+		return l;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see cn.com.timekey.rmh.repository.IssueDAO#getTotalEstimatedHours(int,
+	 * java.util.Date, java.util.Date, java.util.List)
+	 */
+	public Double getTotalEstimatedHours(int userId, Date begin, Date end,
+			List<Integer> statusIds) {
+		String projection = "sum(i.estimatedHours)";
+		Query query = generateFindIssuesByRespQuery(userId, begin, end,
+				statusIds, projection);
+		Double d = (Double) query.getSingleResult();
+		return d;
+	}
+
+	/**
+	 * <p>
+	 * 组合生成根据任务人查询问题的查询语句
+	 * </p>
+	 * 
+	 * @param userId
+	 * @param begin
+	 * @param end
+	 * @param statusIds
+	 * @param projection
+	 *            查询语句中的投影句柄
+	 * @return
+	 */
+	private Query generateFindIssuesByRespQuery(int userId, Date begin,
+			Date end, List<Integer> statusIds, String projection) {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		EntityManager em = EntityManagerFactoryUtils
 				.getTransactionalEntityManager(emf);
 		String qlString = "";
-		qlString += "SELECT i FROM Issue i, CustomValue cv where i.id = cv.customizedId AND cv.customFieldId=6 AND i.estimatedHours !=null AND i.startDate!=null AND i.dueDate!=null";
+		qlString += "SELECT "
+				+ projection
+				+ " FROM Issue i, CustomValue cv where i.id = cv.customizedId AND cv.customFieldId=6 AND i.estimatedHours !=null AND i.startDate!=null AND i.dueDate!=null";
 		qlString += " AND cv.value=:userId ";
+		List<Integer> trackids = Arrays.asList(TrackerEnum.OTCL.getId(),
+				TrackerEnum.OT.getId(), TrackerEnum.CL.getId());
 		parameters.put("userId", String.valueOf(userId));
 		if (begin != null) {
 			qlString += " AND i.startDate >= :begin";
@@ -63,21 +107,21 @@ public class IssueDAOImpl implements IssueDAO {
 			qlString += " AND i.dueDate < :end";
 			parameters.put("end", end);
 		}
+		qlString += " AND NOT EXISTS ( FROM Issue t WHERE t.parentId = i.id) ";
+		qlString += " AND i.trackerId NOT IN (:trackids) ";// 过滤不用显示的问题类型
+		logger.info("trackids: " + trackids);
+		parameters.put("trackids", trackids);
 		if (statusIds != null) {
 			qlString += " AND i.statusId in ( :statusIds ) ";
 			parameters.put("statusIds", statusIds);
 		}
-		qlString += " AND NOT EXISTS ( FROM Issue t WHERE t.parentId = i.id) ";
-		qlString += " AND i.trackerId NOT IN (16,17,18) ";
 		Query query = em.createQuery(qlString);
 		if (CollectionUtils.isEmpty(parameters) == false) {
 			for (Map.Entry<String, Object> e : parameters.entrySet()) {
 				query.setParameter(e.getKey(), e.getValue());
 			}
 		}
-		@SuppressWarnings("unchecked")
-		List<Issue> l = query.getResultList();
-		return l;
+		return query;
 	}
 
 }

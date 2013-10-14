@@ -44,6 +44,14 @@ public interface VUserIsuesHourService {
 	@Transactional(readOnly = true)
 	public List<VUserIsuesHour> findCurrentYearInfo(int userId);
 
+	/**
+	 * <p>
+	 * 实例查询
+	 * </p>
+	 * 
+	 * @param example
+	 * @return VUserIsuesHour的列表
+	 */
 	@Transactional(readOnly = true)
 	public List<VUserIsuesHour> findByExample(VUserIsuesHour example);
 

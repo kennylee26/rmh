@@ -38,9 +38,9 @@ public class UserIssuesHourController {
 	public String getUserHourInfo(@PathVariable("userid") String userid,
 			Model model) {
 		logger.debug("UserIssuesHourController.getUserHourInfo()");
-		VUserIsuesHour hourinfo = vUserIsuesHourService.findLast(Integer
+		VUserIsuesHour spentTimeInfo = vUserIsuesHourService.findLast(Integer
 				.valueOf(userid));
-		model.addAttribute("hourinfo", hourinfo);
+		model.addAttribute("hourinfo", spentTimeInfo);
 		return "hourinfo";
 	}
 }

@@ -10,6 +10,8 @@
 		<class>cn.com.timekey.rmh.entity.User</class>
 		<class>cn.com.timekey.rmh.entity.CustomField</class>
 		<class>cn.com.timekey.rmh.entity.CustomValue</class>
+		<class>cn.com.timekey.rmh.entity.IssueStatus</class>
+		<class>cn.com.timekey.rmh.entity.Tracker</class>
 		<properties>
 			<property name="hibernate.hbm2ddl.auto" value="none" />
 			<property name="hibernate.show_sql" value="true" />

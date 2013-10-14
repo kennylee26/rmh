@@ -4,16 +4,12 @@
  */
 package cn.com.timekey.rmh.repository.impl;
 
-import javax.annotation.Resource;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.orm.jpa.EntityManagerFactoryUtils;
 import org.springframework.stereotype.Repository;
 
 import cn.com.timekey.rmh.entity.User;
+import cn.com.timekey.rmh.repository.AbstractRepository;
 import cn.com.timekey.rmh.repository.UserDAO;
 
 /**
@@ -26,10 +22,7 @@ import cn.com.timekey.rmh.repository.UserDAO;
  * @version 1.0.0<br/>
  */
 @Repository("userDAO")
-public class UserDAOImpl implements UserDAO {
-
-	@Resource(name = "entityManagerFactory")
-	protected EntityManagerFactory emf;
+public class UserDAOImpl extends AbstractRepository implements UserDAO {
 
 	private final Log logger = LogFactory.getLog(getClass());
 
@@ -40,8 +33,6 @@ public class UserDAOImpl implements UserDAO {
 	 */
 	public User findById(int id) {
 		logger.debug("UserDAOImpl.findById()");
-		EntityManager em = EntityManagerFactoryUtils
-				.getTransactionalEntityManager(emf);
-		return em.find(User.class, id);
+		return getEntityManager().find(User.class, id);
 	}
 }

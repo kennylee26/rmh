@@ -12,19 +12,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.orm.jpa.EntityManagerFactoryUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
 import cn.com.timekey.rmh.entity.User;
 import cn.com.timekey.rmh.entity.VUserIsuesHour;
+import cn.com.timekey.rmh.repository.AbstractRepository;
 import cn.com.timekey.rmh.repository.VUserIsuesHourDAO;
 
 /**
@@ -37,11 +35,10 @@ import cn.com.timekey.rmh.repository.VUserIsuesHourDAO;
  * @version 1.0.0<br/>
  */
 @Repository("vUserIsuesHourDAO")
-public class VUserIsuesHourDAOImpl implements VUserIsuesHourDAO {
+public class VUserIsuesHourDAOImpl extends AbstractRepository implements
+		VUserIsuesHourDAO {
 
 	private final Log logger = LogFactory.getLog(getClass());
-	@Resource(name = "entityManagerFactory")
-	protected EntityManagerFactory emf;
 
 	/*
 	 * (non-Javadoc)
@@ -52,8 +49,7 @@ public class VUserIsuesHourDAOImpl implements VUserIsuesHourDAO {
 	 */
 	public List<VUserIsuesHour> findByExample(VUserIsuesHour example) {
 		logger.debug("VUserIsuesHourDAOImpl.findByExample()");
-		EntityManager em = EntityManagerFactoryUtils
-				.getTransactionalEntityManager(emf);
+		EntityManager em = getEntityManager();
 		List<VUserIsuesHour> l = new ArrayList<VUserIsuesHour>();
 		Map<Integer, Object> parameters = null;
 		String queryString = "SELECT user_name,year,month,isues_hours FROM v_user_isues_hours_finished ";

@@ -33,8 +33,26 @@ public interface IssueDAO {
 	 *            结束日期
 	 * @param statusIds
 	 *            问题的状态id 可为null
-	 * @return
+	 * @return List of Issue
 	 */
-	public List<Issue> findResponsibleIssues(int userId, Date begin, Date end,
+	public List<Issue> findIssuesByResponsible(int userId, Date begin,
+			Date end, List<Integer> statusIds);
+
+	/**
+	 * <p>
+	 * 根据责任人ID查找相关联的问题的estimatedHours时间总和。
+	 * </p>
+	 * 
+	 * @param userId
+	 *            int 责任id
+	 * @param begin
+	 *            开始日期
+	 * @param end
+	 *            结束日期
+	 * @param statusIds
+	 *            问题的状态id 可为null
+	 * @return Double 符合条件的问题的estimatedHours的总和。
+	 */
+	public Double getTotalEstimatedHours(int userId, Date begin, Date end,
 			List<Integer> statusIds);
 }
