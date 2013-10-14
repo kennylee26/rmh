@@ -2,7 +2,7 @@
 <%@ page session="false" %>
 <html>
 <head>
-	<title>Home</title>
+	<title>Redmine辅助系统</title>
 </head>
 <body>
 <h1> 

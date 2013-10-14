@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 
 import cn.com.timekey.rmh.entity.Issue;
+import cn.com.timekey.rmh.entity.IssueStatus;
 import cn.com.timekey.rmh.vo.MonthWorkInfo;
 
 /**
@@ -29,7 +30,7 @@ public interface IssueService {
 	 * 
 	 * @param userId
 	 *            用户id
-	 * @see #getNewestWorkInfoByUserId(int, int, int)
+	 * @see #getWorkInfoByUserId(int, int, int)
 	 * @return {@link MonthWorkInfo}
 	 */
 	@Transactional(readOnly = true)
@@ -49,8 +50,7 @@ public interface IssueService {
 	 * @return {@link MonthWorkInfo}
 	 */
 	@Transactional(readOnly = true)
-	public MonthWorkInfo getNewestWorkInfoByUserId(int userId, int year,
-			int month);
+	public MonthWorkInfo getWorkInfoByUserId(int userId, int year, int month);
 
 	/**
 	 * <p>
@@ -59,14 +59,14 @@ public interface IssueService {
 	 * 
 	 * @param userId
 	 *            Integer 用户id
-	 * @param issueStatusIds
-	 *            List 查询的问题状态id。可为null，标识查询全部。
+	 * @param issueStatuses
+	 *            List 查询的问题状态。可为null，标识查询全部。
 	 * @return List of Issue
 	 * @see #findIssuesByResponsible(int, int, int, List)
 	 */
 	@Transactional(readOnly = true)
 	public List<Issue> findCurrentIssuesByResponsible(int userId,
-			List<Integer> issueStatusIds);
+			List<IssueStatus> issueStatuses);
 
 	/**
 	 * 
@@ -97,13 +97,13 @@ public interface IssueService {
 	 *            Integer 年份
 	 * @param month
 	 *            Integer 月份，1月份为1，2月份为2，如此类推。
-	 * @param issueStatusIds
+	 * @param issueStatuses
 	 *            List 查询的问题状态id。可为null，标识查询全部。
 	 * @return List of Issue
 	 */
 	@Transactional(readOnly = true)
 	public List<Issue> findIssuesByResponsible(int userId, int year, int month,
-			List<Integer> issueStatusIds);
+			List<IssueStatus> issueStatuses);
 
 	/**
 	 * <p>
@@ -118,7 +118,8 @@ public interface IssueService {
 	 *            Integer 月份
 	 * @param isClosed
 	 *            Boolean
-	 *            是否关闭状态的问题。可为null，表示查询全部。isClosed对应的status可查询IssueStatus表。
+	 *            true表示查询全部没关闭的任务，"关闭"的定义参考IssueStatus的isClosed字段，false表示查询全部属于已关闭
+	 *            （id=5）状态的任务。可为null，表示查询两者。
 	 * @return List of Issue
 	 * @see #findIssuesByResponsible(int, int, int, List)
 	 */

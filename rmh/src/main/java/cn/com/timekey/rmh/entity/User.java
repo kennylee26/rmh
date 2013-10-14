@@ -3,42 +3,44 @@ package cn.com.timekey.rmh.entity;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
+
 
 /**
  * The persistent class for the users database table.
  * 
  */
 @Entity
-@Table(name = "users")
-@NamedQuery(name = "User.findAll", query = "SELECT u FROM User u")
+@Table(name="users")
+@NamedQuery(name="User.findAll", query="SELECT u FROM User u")
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 
 	private byte admin;
 
-	@Column(name = "auth_source_id")
+	@Column(name="auth_source_id")
 	private Integer authSourceId;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "created_on")
+	@Column(name="created_on")
 	private Date createdOn;
 
 	private String firstname;
 
-	@Column(name = "hashed_password")
+	@Column(name="hashed_password")
 	private String hashedPassword;
 
-	@Column(name = "identity_url")
+	@Column(name="identity_url")
 	private String identityUrl;
 
 	private String language;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "last_login_on")
+	@Column(name="last_login_on")
 	private Date lastLoginOn;
 
 	private String lastname;
@@ -47,7 +49,7 @@ public class User implements Serializable {
 
 	private String mail;
 
-	@Column(name = "mail_notification")
+	@Column(name="mail_notification")
 	private String mailNotification;
 
 	private String salt;
@@ -57,8 +59,16 @@ public class User implements Serializable {
 	private String type;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "updated_on")
+	@Column(name="updated_on")
 	private Date updatedOn;
+
+	//bi-directional many-to-one association to Issue
+	@OneToMany(mappedBy="assignedUser")
+	private List<Issue> asignedIssue;
+
+	//bi-directional many-to-one association to Issue
+	@OneToMany(mappedBy="authorUser")
+	private List<Issue> authorIssue;
 
 	public User() {
 	}
@@ -199,9 +209,51 @@ public class User implements Serializable {
 		this.updatedOn = updatedOn;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	public List<Issue> getAsignedIssue() {
+		return this.asignedIssue;
+	}
+
+	public void setAsignedIssue(List<Issue> asignedIssue) {
+		this.asignedIssue = asignedIssue;
+	}
+
+	public Issue addAsignedIssue(Issue asignedIssue) {
+		getAsignedIssue().add(asignedIssue);
+		asignedIssue.setAssignedUser(this);
+
+		return asignedIssue;
+	}
+
+	public Issue removeAsignedIssue(Issue asignedIssue) {
+		getAsignedIssue().remove(asignedIssue);
+		asignedIssue.setAssignedUser(null);
+
+		return asignedIssue;
+	}
+
+	public List<Issue> getAuthorIssue() {
+		return this.authorIssue;
+	}
+
+	public void setAuthorIssue(List<Issue> authorIssue) {
+		this.authorIssue = authorIssue;
+	}
+
+	public Issue addAuthorIssue(Issue authorIssue) {
+		getAuthorIssue().add(authorIssue);
+		authorIssue.setAuthorUser(this);
+
+		return authorIssue;
+	}
+
+	public Issue removeAuthorIssue(Issue authorIssue) {
+		getAuthorIssue().remove(authorIssue);
+		authorIssue.setAuthorUser(null);
+
+		return authorIssue;
+	}
+
+	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

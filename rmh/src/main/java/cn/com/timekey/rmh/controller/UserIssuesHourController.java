@@ -4,6 +4,8 @@
  */
 package cn.com.timekey.rmh.controller;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.apache.commons.logging.Log;
@@ -14,8 +16,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import cn.com.timekey.rmh.entity.VUserIsuesHour;
-import cn.com.timekey.rmh.service.VUserIsuesHourService;
+import cn.com.timekey.rmh.entity.Issue;
+import cn.com.timekey.rmh.service.IssueService;
+import cn.com.timekey.rmh.vo.MonthWorkInfo;
 
 /**
  * <b>类名称：</b>UserIssuesHourController<br/>
@@ -30,7 +33,7 @@ import cn.com.timekey.rmh.service.VUserIsuesHourService;
 public class UserIssuesHourController {
 
 	@Resource
-	private VUserIsuesHourService vUserIsuesHourService;
+	private IssueService issueService;
 
 	private final Log logger = LogFactory.getLog(getClass());
 
@@ -38,9 +41,13 @@ public class UserIssuesHourController {
 	public String getUserHourInfo(@PathVariable("userid") String userid,
 			Model model) {
 		logger.debug("UserIssuesHourController.getUserHourInfo()");
-		VUserIsuesHour spentTimeInfo = vUserIsuesHourService.findLast(Integer
-				.valueOf(userid));
+		MonthWorkInfo spentTimeInfo = issueService
+				.getNewestWorkInfoByUserId(Integer.valueOf(userid));
+		Boolean isClosed = false;
+		List<Issue> issues  = issueService.findIssuesByResponsible(spentTimeInfo.getUserId(),
+				spentTimeInfo.getYear(), spentTimeInfo.getMonth(), isClosed);
 		model.addAttribute("hourinfo", spentTimeInfo);
+		model.addAttribute("issues", issues);
 		return "hourinfo";
 	}
 }

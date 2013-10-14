@@ -4,6 +4,8 @@
  */
 package cn.com.timekey.rmh.enums;
 
+import cn.com.timekey.rmh.entity.IssueStatus;
+
 /**
  * <b>类名称：</b>IssueStatus<br/>
  * <b>类描述：</b>问题的状态<br/>
@@ -29,5 +31,11 @@ public enum IssueStatusEnum {
 	 */
 	public int getId() {
 		return id;
+	}
+
+	public IssueStatus getEntity() {
+		IssueStatus e = new IssueStatus();
+		e.setId(this.id);
+		return e;
 	}
 }

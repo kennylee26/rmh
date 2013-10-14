@@ -2,6 +2,7 @@ package cn.com.timekey.rmh.entity;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * The persistent class for the issue_statuses database table.
@@ -23,7 +24,7 @@ public class IssueStatus implements Serializable {
 	private Integer defaultDoneRatio;
 
 	@Column(name = "is_closed")
-	private int isClosed;
+	private Integer isClosed;
 
 	@Column(name = "is_default")
 	private byte isDefault;
@@ -31,6 +32,10 @@ public class IssueStatus implements Serializable {
 	private String name;
 
 	private Integer position;
+
+	// bi-directional many-to-one association to Issue
+	@OneToMany(mappedBy = "issueStatus")
+	private List<Issue> issues;
 
 	public IssueStatus() {
 	}
@@ -49,6 +54,14 @@ public class IssueStatus implements Serializable {
 
 	public void setDefaultDoneRatio(Integer defaultDoneRatio) {
 		this.defaultDoneRatio = defaultDoneRatio;
+	}
+
+	public Integer getIsClosed() {
+		return this.isClosed;
+	}
+
+	public void setIsClosed(Integer isClosed) {
+		this.isClosed = isClosed;
 	}
 
 	public byte getIsDefault() {
@@ -75,21 +88,26 @@ public class IssueStatus implements Serializable {
 		this.position = position;
 	}
 
-	/**
-	 * isClosed
-	 * 
-	 * @return the isClosed
-	 */
-	public int getIsClosed() {
-		return isClosed;
+	public List<Issue> getIssues() {
+		return this.issues;
 	}
 
-	/**
-	 * @param isClosed
-	 *            the isClosed to set
-	 */
-	public void setIsClosed(int isClosed) {
-		this.isClosed = isClosed;
+	public void setIssues(List<Issue> issues) {
+		this.issues = issues;
+	}
+
+	public Issue addIssue(Issue issue) {
+		getIssues().add(issue);
+		issue.setIssueStatus(this);
+
+		return issue;
+	}
+
+	public Issue removeIssue(Issue issue) {
+		getIssues().remove(issue);
+		issue.setIssueStatus(null);
+
+		return issue;
 	}
 
 	/*

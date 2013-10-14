@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import cn.com.timekey.rmh.entity.Issue;
+import cn.com.timekey.rmh.entity.IssueStatus;
 import cn.com.timekey.rmh.enums.IssueStatusEnum;
 import cn.com.timekey.rmh.service.IssueService;
 import cn.com.timekey.rmh.vo.MonthWorkInfo;
@@ -46,7 +47,7 @@ public class IssueServiceImplTest {
 
 	private final Log logger = LogFactory.getLog(getClass());
 
-	private int userId = 3;
+	private Integer userId = 3;
 
 	@Test
 	public void testGetNewestWorkInfoByUserId() throws Exception {
@@ -56,7 +57,8 @@ public class IssueServiceImplTest {
 	}
 
 	@Test
-	public void testFindCurrentIssuesByResponsibleIntBoolean() throws Exception {
+	public void testFindCurrentIssuesByResponsibleIntegerBoolean()
+			throws Exception {
 		Boolean isClosed = null;
 		List<Issue> issues = issueService.findCurrentIssuesByResponsible(
 				userId, isClosed);
@@ -67,11 +69,12 @@ public class IssueServiceImplTest {
 	}
 
 	@Test
-	public void testFindCurrentIssuesByResponsibleIntList() throws Exception {
-		List<Integer> issueStatusIds = null;
-		issueStatusIds = Arrays.asList(IssueStatusEnum.CLOSED.getId());
+	public void testFindCurrentIssuesByResponsibleIntegerList()
+			throws Exception {
+		List<IssueStatus> issueStatuses = null;
+		issueStatuses = Arrays.asList(IssueStatusEnum.CLOSED.getEntity());
 		List<Issue> issues = issueService.findCurrentIssuesByResponsible(
-				userId, issueStatusIds);
+				userId, issueStatuses);
 		Assert.assertFalse(CollectionUtils.isEmpty(issues));
 		for (Issue issue : issues) {
 			logger.info(issue.getSubject());
@@ -79,27 +82,28 @@ public class IssueServiceImplTest {
 	}
 
 	@Test
-	public void testFindIssuesByResponsibleIntIntIntBoolean() throws Exception {
-		int year = 2013;
-		int month = 9;
+	public void testFindIssuesByResponsibleIntegerIntegerIntegerBoolean()
+			throws Exception {
+		Integer year = 2013;
+		Integer month = 9;
 		Boolean isClosed = null;
 		List<Issue> issues = issueService.findIssuesByResponsible(userId, year,
 				month, isClosed);
 		Assert.assertFalse(CollectionUtils.isEmpty(issues));
 		double totalTime = 0d;
 		for (Issue issue : issues) {
-			logger.info(issue.getSubject() + " " + issue.getStatusId());
+			logger.info(issue.getSubject() + ": " + issue.getIssueStatus().getName());
 			totalTime += issue.getEstimatedHours();
 		}
 		logger.info("total: " + totalTime + " hours");
 	}
 
 	@Test
-	public void testGetNewestWorkInfoByUserIdIntIntInt() throws Exception {
-		int year = 2013;
-		int month = 9;
-		MonthWorkInfo info = issueService.getNewestWorkInfoByUserId(userId,
-				year, month);
+	public void testGetWorkInfoByUserIdIntegerIntegerInteger() throws Exception {
+		Integer year = 2013;
+		Integer month = 9;
+		MonthWorkInfo info = issueService.getWorkInfoByUserId(userId, year,
+				month);
 		Assert.assertNotNull(info);
 		logger.info(info);
 	}

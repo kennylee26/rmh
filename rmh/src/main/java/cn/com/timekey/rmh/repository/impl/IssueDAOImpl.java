@@ -22,6 +22,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
 import cn.com.timekey.rmh.entity.Issue;
+import cn.com.timekey.rmh.entity.IssueStatus;
 import cn.com.timekey.rmh.enums.TrackerEnum;
 import cn.com.timekey.rmh.repository.IssueDAO;
 
@@ -48,11 +49,11 @@ public class IssueDAOImpl implements IssueDAO {
 	 * java.util.Date, java.util.Date, java.util.List)
 	 */
 	public List<Issue> findIssuesByResponsible(int userId, Date begin,
-			Date end, List<Integer> statusIds) {
+			Date end, List<IssueStatus> issueStatuses) {
 		logger.debug("IssueDAOImpl.findResponsibleIssues()");
 		String projection = "i";
 		Query query = generateFindIssuesByRespQuery(userId, begin, end,
-				statusIds, projection);
+				issueStatuses, projection);
 		@SuppressWarnings("unchecked")
 		List<Issue> l = query.getResultList();
 		return l;
@@ -65,10 +66,10 @@ public class IssueDAOImpl implements IssueDAO {
 	 * java.util.Date, java.util.Date, java.util.List)
 	 */
 	public Double getTotalEstimatedHours(int userId, Date begin, Date end,
-			List<Integer> statusIds) {
+			List<IssueStatus> issueStatuses) {
 		String projection = "sum(i.estimatedHours)";
 		Query query = generateFindIssuesByRespQuery(userId, begin, end,
-				statusIds, projection);
+				issueStatuses, projection);
 		Double d = (Double) query.getSingleResult();
 		return d;
 	}
@@ -87,7 +88,7 @@ public class IssueDAOImpl implements IssueDAO {
 	 * @return
 	 */
 	private Query generateFindIssuesByRespQuery(int userId, Date begin,
-			Date end, List<Integer> statusIds, String projection) {
+			Date end, List<IssueStatus> issueStatuses, String projection) {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		EntityManager em = EntityManagerFactoryUtils
 				.getTransactionalEntityManager(emf);
@@ -111,9 +112,9 @@ public class IssueDAOImpl implements IssueDAO {
 		qlString += " AND i.trackerId NOT IN (:trackids) ";// 过滤不用显示的问题类型
 		logger.info("trackids: " + trackids);
 		parameters.put("trackids", trackids);
-		if (statusIds != null) {
-			qlString += " AND i.statusId in ( :statusIds ) ";
-			parameters.put("statusIds", statusIds);
+		if (issueStatuses != null) {
+			qlString += " AND i.issueStatus in ( :issueStatus ) ";
+			parameters.put("issueStatus", issueStatuses);
 		}
 		Query query = em.createQuery(qlString);
 		if (CollectionUtils.isEmpty(parameters) == false) {

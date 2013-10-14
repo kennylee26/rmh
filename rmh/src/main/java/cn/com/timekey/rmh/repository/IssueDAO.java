@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import cn.com.timekey.rmh.entity.Issue;
+import cn.com.timekey.rmh.entity.IssueStatus;
 
 /**
  * <b>类名称：</b>IssueDAO<br/>
@@ -31,12 +32,12 @@ public interface IssueDAO {
 	 *            开始日期
 	 * @param end
 	 *            结束日期
-	 * @param statusIds
-	 *            问题的状态id 可为null
+	 * @param issueStatuses
+	 *            查询的问题状态列表，可为null
 	 * @return List of Issue
 	 */
 	public List<Issue> findIssuesByResponsible(int userId, Date begin,
-			Date end, List<Integer> statusIds);
+			Date end, List<IssueStatus> issueStatuses);
 
 	/**
 	 * <p>
@@ -49,10 +50,10 @@ public interface IssueDAO {
 	 *            开始日期
 	 * @param end
 	 *            结束日期
-	 * @param statusIds
-	 *            问题的状态id 可为null
+	 * @param issueStatuses
+	 *            查询的问题状态列表，可为null
 	 * @return Double 符合条件的问题的estimatedHours的总和。
 	 */
 	public Double getTotalEstimatedHours(int userId, Date begin, Date end,
-			List<Integer> statusIds);
+			List<IssueStatus> issueStatuses);
 }

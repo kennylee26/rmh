@@ -4,7 +4,6 @@
  */
 package cn.com.timekey.rmh.service.impl;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -15,8 +14,8 @@ import javax.annotation.Resource;
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import cn.com.timekey.rmh.entity.Issue;
 import cn.com.timekey.rmh.entity.IssueStatus;
@@ -56,23 +55,21 @@ public class IssueServiceImpl implements IssueService {
 		logger.debug("IssueServiceImpl.getNewestWorkInfoByUserId()");
 		int year = Calendar.getInstance().get(Calendar.YEAR);
 		int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
-		return this.getNewestWorkInfoByUserId(userId, year, month);
+		return this.getWorkInfoByUserId(userId, year, month);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * cn.com.timekey.rmh.service.IssueService#getNewestWorkInfoByUserId(int,
+	 * @see cn.com.timekey.rmh.service.IssueService#getWorkInfoByUserId(int,
 	 * int, int)
 	 */
-	public MonthWorkInfo getNewestWorkInfoByUserId(int userId, int year,
-			int month) {
+	public MonthWorkInfo getWorkInfoByUserId(int userId, int year, int month) {
 		Date[] period = DateUtils.getDatePeriod(year, month);
 		Date begin = period[0];
 		Date end = period[1];
-		List<Integer> finishedStatusIds = getIssueStatusIdsByIsClosed(true);// 完成状态
-		List<Integer> allEffictiveStatusIds = getIssueStatusIdsByIsClosed(null);// 全部有用的状态
+		List<IssueStatus> finishedStatusIds = getIssueStatusIdsByIsClosed(true);// 完成状态
+		List<IssueStatus> allEffictiveStatusIds = getIssueStatusIdsByIsClosed(null);// 全部有用的状态
 		Double finishedTime = issueDAO.getTotalEstimatedHours(userId, begin,
 				end, finishedStatusIds);
 		if (finishedTime == null)
@@ -95,7 +92,7 @@ public class IssueServiceImpl implements IssueService {
 	 * (int, java.util.List)
 	 */
 	public List<Issue> findCurrentIssuesByResponsible(int userId,
-			List<Integer> issueStatusIds) {
+			List<IssueStatus> issueStatusIds) {
 		int year = Calendar.getInstance().get(Calendar.YEAR);
 		int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
 		return this
@@ -111,7 +108,7 @@ public class IssueServiceImpl implements IssueService {
 	 */
 	public List<Issue> findCurrentIssuesByResponsible(int userId,
 			Boolean isClosed) {
-		List<Integer> issueStatusIds = getIssueStatusIdsByIsClosed(isClosed);
+		List<IssueStatus> issueStatusIds = getIssueStatusIdsByIsClosed(isClosed);
 		return this.findCurrentIssuesByResponsible(userId, issueStatusIds);
 	}
 
@@ -123,37 +120,22 @@ public class IssueServiceImpl implements IssueService {
 	 * @param isClosed
 	 * @return
 	 */
-	private List<Integer> getIssueStatusIdsByIsClosed(Boolean isClosed) {
-		List<Integer> issueStatusIds = null;
+	private List<IssueStatus> getIssueStatusIdsByIsClosed(Boolean isClosed) {
+		List<IssueStatus> issueStatuses = null;
 		if (isClosed != null) {
 			if (isClosed == true) {
 				// 只有已关闭状态的有用。
-				return Arrays.asList(IssueStatusEnum.CLOSED.getId());
+				return Arrays.asList(IssueStatusEnum.CLOSED.getEntity());
 			} else {
-				List<IssueStatus> issueStatuses = issueStatusDAO
-						.findByIsClosed(isClosed);
-				if (CollectionUtils.isEmpty(issueStatuses) == false) {
-					issueStatusIds = new ArrayList<Integer>(
-							issueStatuses.size());
-					for (IssueStatus i : issueStatuses) {
-						issueStatusIds.add(i.getId());
-					}
-				}
+				issueStatuses = issueStatusDAO.findByIsClosed(isClosed);
 			}
 		} else {
 			// 不传入isClosed表示查询全部，根据业务，可看成是查询全部非关闭的+已关闭状态的。
 			// 为了避免查询已拒绝，无效的等无用状态。by kennylee 2013-10-14
-			List<IssueStatus> issueStatuses = issueStatusDAO
-					.findByIsClosed(false);
-			if (CollectionUtils.isEmpty(issueStatuses) == false) {
-				issueStatusIds = new ArrayList<Integer>(issueStatuses.size());
-				for (IssueStatus i : issueStatuses) {
-					issueStatusIds.add(i.getId());
-				}
-				issueStatusIds.add(IssueStatusEnum.CLOSED.getId());
-			}
+			issueStatuses = issueStatusDAO.findByIsClosed(false);
+			issueStatuses.add(IssueStatusEnum.CLOSED.getEntity());
 		}
-		return issueStatusIds;
+		return issueStatuses;
 	}
 
 	/*
@@ -164,14 +146,20 @@ public class IssueServiceImpl implements IssueService {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Issue> findIssuesByResponsible(int userId, int year, int month,
-			List<Integer> issueStatusIds) {
+			List<IssueStatus> issueStatuses) {
 		Date[] period = DateUtils.getDatePeriod(year, month);
 		Date begin = period[0];
 		Date end = period[1];
 		List<Issue> l = issueDAO.findIssuesByResponsible(userId, begin, end,
-				issueStatusIds);
+				issueStatuses);
 		if (l == null) {
 			l = ListUtils.EMPTY_LIST;
+		} else {
+			for (Issue issue : l) {
+				Hibernate.initialize(issue.getProject());
+				Hibernate.initialize(issue.getAssignedUser());
+				Hibernate.initialize(issue.getIssueStatus());
+			}
 		}
 		return l;
 	}
@@ -182,20 +170,14 @@ public class IssueServiceImpl implements IssueService {
 	 * @see cn.com.timekey.rmh.service.IssueService#findIssuesByResponsible(int,
 	 * int, int, java.lang.Boolean)
 	 */
-	@SuppressWarnings("unchecked")
 	public List<Issue> findIssuesByResponsible(int userId, int year, int month,
 			Boolean isClosed) {
 		Date[] period = DateUtils.getDatePeriod(year, month);
 		Date begin = period[0];
 		Date end = period[1];
 		logger.debug("begin: " + begin + ", end: " + end);
-		List<Integer> issueStatusIds = this
+		List<IssueStatus> issueStatuses = this
 				.getIssueStatusIdsByIsClosed(isClosed);
-		List<Issue> l = issueDAO.findIssuesByResponsible(userId, begin, end,
-				issueStatusIds);
-		if (l == null) {
-			l = ListUtils.EMPTY_LIST;
-		}
-		return l;
+		return this.findIssuesByResponsible(userId, year, month, issueStatuses);
 	}
 }

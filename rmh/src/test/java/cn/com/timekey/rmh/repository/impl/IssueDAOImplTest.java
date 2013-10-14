@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import cn.com.timekey.rmh.entity.Issue;
+import cn.com.timekey.rmh.entity.IssueStatus;
 import cn.com.timekey.rmh.enums.IssueStatusEnum;
 import cn.com.timekey.rmh.repository.IssueDAO;
 import cn.com.timekey.rmh.utils.DateUtils;
@@ -54,10 +55,11 @@ public class IssueDAOImplTest {
 		Date[] period = DateUtils.getDatePeriod(2013, 9);
 		Date begin = period[0];
 		Date end = period[1];
-		List<Integer> statusIds = Arrays.asList(IssueStatusEnum.CLOSED.getId());
-		statusIds = null;// 全部状态的问题
+		List<IssueStatus> statuses = Arrays.asList(IssueStatusEnum.CLOSED
+				.getEntity());
+		statuses = null;// 全部状态的问题
 		List<Issue> l = issueDAO.findIssuesByResponsible(userId, begin, end,
-				statusIds);
+				statuses);
 		Assert.assertFalse(CollectionUtils.isEmpty(l));
 		for (Issue issue : l) {
 			logger.info(issue.getSubject());
@@ -69,9 +71,10 @@ public class IssueDAOImplTest {
 		Date[] period = DateUtils.getDatePeriod(2013, 9);
 		Date begin = period[0];
 		Date end = period[1];
-		List<Integer> statusIds = Arrays.asList(IssueStatusEnum.CLOSED.getId());
-		Double d = issueDAO.getTotalEstimatedHours(userId, begin, end,
-				statusIds);
+		List<IssueStatus> statuses = Arrays.asList(IssueStatusEnum.CLOSED
+				.getEntity());
+		Double d = issueDAO
+				.getTotalEstimatedHours(userId, begin, end, statuses);
 		Assert.assertNotNull(d);
 		logger.info("Total EstimatedHours: " + d);
 	}

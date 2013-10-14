@@ -18,12 +18,6 @@ public class Issue implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 
-	@Column(name = "assigned_to_id")
-	private Integer assignedToId;
-
-	@Column(name = "author_id")
-	private Integer authorId;
-
 	@Column(name = "category_id")
 	private Integer categoryId;
 
@@ -42,7 +36,7 @@ public class Issue implements Serializable {
 	private Date dueDate;
 
 	@Column(name = "estimated_hours")
-	private Float estimatedHours;
+	private float estimatedHours;
 
 	@Column(name = "fixed_version_id")
 	private Integer fixedVersionId;
@@ -61,9 +55,6 @@ public class Issue implements Serializable {
 	@Column(name = "priority_id")
 	private Integer priorityId;
 
-	@Column(name = "project_id")
-	private Integer projectId;
-
 	private Integer rgt;
 
 	@Column(name = "root_id")
@@ -72,9 +63,6 @@ public class Issue implements Serializable {
 	@Temporal(TemporalType.DATE)
 	@Column(name = "start_date")
 	private Date startDate;
-
-	@Column(name = "status_id")
-	private Integer statusId;
 
 	private String subject;
 
@@ -88,6 +76,26 @@ public class Issue implements Serializable {
 	@Column(name = "user_story_id")
 	private Integer userStoryId;
 
+	// bi-directional many-to-one association to Project
+	@ManyToOne
+	@JoinColumn(name = "project_id")
+	private Project project;
+
+	// bi-directional many-to-one association to User
+	@ManyToOne
+	@JoinColumn(name = "assigned_to_id")
+	private User assignedUser;
+
+	// bi-directional many-to-one association to User
+	@ManyToOne
+	@JoinColumn(name = "author_id")
+	private User authorUser;
+
+	// bi-directional many-to-one association to IssueStatus
+	@ManyToOne
+	@JoinColumn(name = "status_id")
+	private IssueStatus issueStatus;
+
 	public Issue() {
 	}
 
@@ -97,22 +105,6 @@ public class Issue implements Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public Integer getAssignedToId() {
-		return this.assignedToId;
-	}
-
-	public void setAssignedToId(Integer assignedToId) {
-		this.assignedToId = assignedToId;
-	}
-
-	public Integer getAuthorId() {
-		return this.authorId;
-	}
-
-	public void setAuthorId(Integer authorId) {
-		this.authorId = authorId;
 	}
 
 	public Integer getCategoryId() {
@@ -155,11 +147,11 @@ public class Issue implements Serializable {
 		this.dueDate = dueDate;
 	}
 
-	public Float getEstimatedHours() {
+	public float getEstimatedHours() {
 		return this.estimatedHours;
 	}
 
-	public void setEstimatedHours(Float estimatedHours) {
+	public void setEstimatedHours(float estimatedHours) {
 		this.estimatedHours = estimatedHours;
 	}
 
@@ -211,14 +203,6 @@ public class Issue implements Serializable {
 		this.priorityId = priorityId;
 	}
 
-	public Integer getProjectId() {
-		return this.projectId;
-	}
-
-	public void setProjectId(Integer projectId) {
-		this.projectId = projectId;
-	}
-
 	public Integer getRgt() {
 		return this.rgt;
 	}
@@ -241,14 +225,6 @@ public class Issue implements Serializable {
 
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
-	}
-
-	public Integer getStatusId() {
-		return this.statusId;
-	}
-
-	public void setStatusId(Integer statusId) {
-		this.statusId = statusId;
 	}
 
 	public String getSubject() {
@@ -283,6 +259,38 @@ public class Issue implements Serializable {
 		this.userStoryId = userStoryId;
 	}
 
+	public Project getProject() {
+		return this.project;
+	}
+
+	public void setProject(Project project) {
+		this.project = project;
+	}
+
+	public User getAssignedUser() {
+		return this.assignedUser;
+	}
+
+	public void setAssignedUser(User assignedUser) {
+		this.assignedUser = assignedUser;
+	}
+
+	public User getAuthorUser() {
+		return this.authorUser;
+	}
+
+	public void setAuthorUser(User authorUser) {
+		this.authorUser = authorUser;
+	}
+
+	public IssueStatus getIssueStatus() {
+		return this.issueStatus;
+	}
+
+	public void setIssueStatus(IssueStatus issueStatus) {
+		this.issueStatus = issueStatus;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -290,18 +298,18 @@ public class Issue implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		return "Issue [id=" + id + ", assignedToId=" + assignedToId
-				+ ", authorId=" + authorId + ", categoryId=" + categoryId
+		return "Issue [id=" + id + ", categoryId=" + categoryId
 				+ ", createdOn=" + createdOn + ", description=" + description
 				+ ", doneRatio=" + doneRatio + ", dueDate=" + dueDate
 				+ ", estimatedHours=" + estimatedHours + ", fixedVersionId="
 				+ fixedVersionId + ", isPrivate=" + isPrivate + ", lft=" + lft
 				+ ", lockVersion=" + lockVersion + ", parentId=" + parentId
-				+ ", priorityId=" + priorityId + ", projectId=" + projectId
-				+ ", rgt=" + rgt + ", rootId=" + rootId + ", startDate="
-				+ startDate + ", statusId=" + statusId + ", subject=" + subject
+				+ ", priorityId=" + priorityId + ", rgt=" + rgt + ", rootId="
+				+ rootId + ", startDate=" + startDate + ", subject=" + subject
 				+ ", trackerId=" + trackerId + ", updatedOn=" + updatedOn
-				+ ", userStoryId=" + userStoryId + "]";
+				+ ", userStoryId=" + userStoryId + ", project=" + project
+				+ ", assignedUser=" + assignedUser + ", authorUser="
+				+ authorUser + ", issueStatus=" + issueStatus + "]";
 	}
 
 }
