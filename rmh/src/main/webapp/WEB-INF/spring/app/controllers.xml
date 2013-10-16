@@ -14,6 +14,10 @@
 	<tx:annotation-driven />
 	<mvc:annotation-driven />
 
+	<mvc:interceptors>
+		<bean class="cn.com.timekey.rmh.interceptor.SecurityInterceptor" />
+	</mvc:interceptors>
+
 	<mvc:resources mapping="/resources/**" location="/resources/" />
 
 	<bean id="validator"

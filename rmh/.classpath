@@ -22,6 +22,11 @@
     </attributes>
   </classpathentry>
   <classpathentry kind="var" path="M2_REPO/javax/mail/mail/1.4/mail-1.4.jar" sourcepath="M2_REPO/javax/mail/mail/1.4/mail-1.4-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/javax/servlet/servlet-api/3.0-alpha-1/servlet-api-3.0-alpha-1.jar" sourcepath="M2_REPO/javax/servlet/servlet-api/3.0-alpha-1/servlet-api-3.0-alpha-1-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/Users/kennylee/WorkSpace/repository/javax/servlet/servlet-api/3.0-alpha-1/servlet-api-3.0-alpha-1-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
   <classpathentry kind="var" path="M2_REPO/javax/xml/stream/stax-api/1.0-2/stax-api-1.0-2.jar" sourcepath="M2_REPO/javax/xml/stream/stax-api/1.0-2/stax-api-1.0-2-sources.jar">
     <attributes>
       <attribute value="jar:file:/Users/kennylee/WorkSpace/repository/javax/xml/stream/stax-api/1.0-2/stax-api-1.0-2-javadoc.jar!/" name="javadoc_location"/>
