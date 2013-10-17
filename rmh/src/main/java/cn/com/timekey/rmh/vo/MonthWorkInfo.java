@@ -4,6 +4,8 @@
  */
 package cn.com.timekey.rmh.vo;
 
+import java.util.List;
+
 /**
  * <b>类名称：</b>MonthWorkInfo<br/>
  * <b>类描述：</b>用户月份工作情况<br/>
@@ -18,6 +20,8 @@ public class MonthWorkInfo {
 	private int userId;
 	private int month;
 	private int year;
+	
+	private List<Issue> issues;
 
 	/**
 	 * finishedTime:已经完成的时间
@@ -162,17 +166,32 @@ public class MonthWorkInfo {
 		this.targetTime = targetTime;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/**
+	 * issues  
+	 * @return the issues
+	 */
+	public List<Issue> getIssues() {
+		return issues;
+	}
+
+	/**
+	 * @param issues the issues to set
+	 */
+	public void setIssues(List<Issue> issues) {
+		this.issues = issues;
+	}
+
+	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return "MonthWorkInfo [userId=" + userId + ", month=" + month
-				+ ", year=" + year + ", finishedTime=" + finishedTime
-				+ ", planingTime=" + planingTime + ", targetTime=" + targetTime
-				+ "]";
+				+ ", year=" + year + ", issues=" + issues + ", finishedTime="
+				+ finishedTime + ", planingTime=" + planingTime
+				+ ", targetTime=" + targetTime + "]";
 	}
+	
+	
 
 }

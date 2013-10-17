@@ -11,9 +11,9 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jetty.version>6.1.4</jetty.version>
-		<spring.version>3.0.5.RELEASE</spring.version>
+		<spring.version>3.2.4.RELEASE</spring.version>
 		<slf4j.version>1.5.10</slf4j.version>
-		<java.version>1.5</java.version>
+		<java.version>1.6</java.version>
 		<junit.version>4.8.2</junit.version>
 		<jackson.version>1.9.13</jackson.version>
 	</properties>
@@ -179,12 +179,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-core-lgpl</artifactId>
+			<artifactId>jackson-core-asl</artifactId>
 			<version>${jackson.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-lgpl</artifactId>
+			<artifactId>jackson-mapper-asl</artifactId>
 			<version>${jackson.version}</version>
 		</dependency>
 	</dependencies>
@@ -217,7 +217,7 @@
 				<artifactId>maven-eclipse-plugin</artifactId>
 				<version>2.9</version>
 				<configuration>
-					<additionalProjectFacets>
+ 					<additionalProjectFacets>
 						<jpt.jpa>2.1</jpt.jpa>
 					</additionalProjectFacets>
 					<additionalProjectnatures>
@@ -225,11 +225,11 @@
 						<projectnature>org.eclipse.m2e.core.maven2Nature</projectnature>
 						<projectnature>org.springframework.ide.eclipse.core.springnature</projectnature>
 					</additionalProjectnatures>
-					<additionalBuildcommands>
+					<!--<additionalBuildcommands>
 						<buildcommand>org.eclipse.jdt.core.javabuilder</buildcommand>
 						<buildcommand>org.eclipse.m2e.core.maven2Builder</buildcommand>
 						<buildcommand>org.springframework.ide.eclipse.core.springbuilder</buildcommand>
-					</additionalBuildcommands>
+					</additionalBuildcommands>-->
 					<classpathContainers>
 						<classpathContainer>org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v7.0</classpathContainer>
 						<classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>
