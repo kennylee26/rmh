@@ -83,7 +83,7 @@ public class UserIssuesHourController {
 	 *            String 查询的问题类别。all为全部，closed为已经关闭的，否则都为查询未关闭的。
 	 * @return JSON
 	 */
-	@RequestMapping(value = "/ajax/user/work_info/{userid}")
+	@RequestMapping(value = "/ajax/user/work_info/{userid}", method = RequestMethod.GET)
 	public @ResponseBody
 	MonthWorkInfo getUserWorkInfo(@PathVariable("userid") String userid,
 			@RequestParam("type") String type) {
