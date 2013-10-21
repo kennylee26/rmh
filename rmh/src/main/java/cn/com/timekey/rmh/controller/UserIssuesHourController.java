@@ -19,6 +19,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.com.timekey.rmh.entity.Issue;
@@ -61,13 +62,22 @@ public class UserIssuesHourController {
 		return "hourinfo";
 	}
 
-	@RequestMapping(value = "/ajax/user/work_info/{userid}", method = RequestMethod.GET)
+	@RequestMapping(value = "/ajax/user/work_info/{userid}")
 	public @ResponseBody
-	MonthWorkInfo getUserWorkInfo(@PathVariable("userid") String userid) {
+	MonthWorkInfo getUserWorkInfo(@PathVariable("userid") String userid,
+			@RequestParam("type") String type) {
 		logger.debug("UserIssuesHourController.getUserHourInfo()");
 		MonthWorkInfo workInfo = issueService.getNewestWorkInfoByUserId(Integer
 				.valueOf(userid));
-		Boolean isClosed = false;
+		Boolean isClosed = false;// 默认显示未关闭的
+		if (type != null) {
+			if (type.equalsIgnoreCase("all")) {
+				isClosed = null;
+			} else if (type.equalsIgnoreCase("closed")) {
+				isClosed = true;
+			}
+		}
+		logger.debug("isClosed: " + isClosed);
 		List<Issue> issues = issueService.findIssuesByResponsible(
 				workInfo.getUserId(), workInfo.getYear(), workInfo.getMonth(),
 				isClosed);
@@ -108,7 +118,8 @@ public class UserIssuesHourController {
 					User.newInstance(issue.getAuthorUser().getId(), issue
 							.getAuthorUser().getFirstname()
 							+ issue.getAuthorUser().getLastname()), issue
-							.getIssueStatus().getName());
+							.getIssueStatus().getName(), issue.getIssueStatus()
+							.getIsClosed() != 0);
 			l.add(is);
 		}
 	}
@@ -120,7 +131,7 @@ public class UserIssuesHourController {
 	 * 
 	 * @param sdf
 	 * @param issue
-	 * @return
+	 * @return String 日期格式的字符串
 	 */
 	private String format(Date date) {
 		return date != null ? sdf.format(date) : "";

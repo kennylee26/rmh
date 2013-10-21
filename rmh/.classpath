@@ -168,14 +168,14 @@
     </attributes>
   </classpathentry>
   <classpathentry kind="var" path="M2_REPO/mysql/mysql-connector-java/5.1.18/mysql-connector-java-5.1.18.jar"/>
-  <classpathentry kind="var" path="M2_REPO/org/codehaus/jackson/jackson-core-lgpl/1.9.13/jackson-core-lgpl-1.9.13.jar" sourcepath="M2_REPO/org/codehaus/jackson/jackson-core-lgpl/1.9.13/jackson-core-lgpl-1.9.13-sources.jar">
+  <classpathentry kind="var" path="M2_REPO/org/codehaus/jackson/jackson-core-asl/1.9.13/jackson-core-asl-1.9.13.jar" sourcepath="M2_REPO/org/codehaus/jackson/jackson-core-asl/1.9.13/jackson-core-asl-1.9.13-sources.jar">
     <attributes>
-      <attribute value="jar:file:/Users/kennylee/WorkSpace/repository/org/codehaus/jackson/jackson-core-lgpl/1.9.13/jackson-core-lgpl-1.9.13-javadoc.jar!/" name="javadoc_location"/>
+      <attribute value="jar:file:/Users/kennylee/WorkSpace/repository/org/codehaus/jackson/jackson-core-asl/1.9.13/jackson-core-asl-1.9.13-javadoc.jar!/" name="javadoc_location"/>
     </attributes>
   </classpathentry>
-  <classpathentry kind="var" path="M2_REPO/org/codehaus/jackson/jackson-mapper-lgpl/1.9.13/jackson-mapper-lgpl-1.9.13.jar" sourcepath="M2_REPO/org/codehaus/jackson/jackson-mapper-lgpl/1.9.13/jackson-mapper-lgpl-1.9.13-sources.jar">
+  <classpathentry kind="var" path="M2_REPO/org/codehaus/jackson/jackson-mapper-asl/1.9.13/jackson-mapper-asl-1.9.13.jar" sourcepath="M2_REPO/org/codehaus/jackson/jackson-mapper-asl/1.9.13/jackson-mapper-asl-1.9.13-sources.jar">
     <attributes>
-      <attribute value="jar:file:/Users/kennylee/WorkSpace/repository/org/codehaus/jackson/jackson-mapper-lgpl/1.9.13/jackson-mapper-lgpl-1.9.13-javadoc.jar!/" name="javadoc_location"/>
+      <attribute value="jar:file:/Users/kennylee/WorkSpace/repository/org/codehaus/jackson/jackson-mapper-asl/1.9.13/jackson-mapper-asl-1.9.13-javadoc.jar!/" name="javadoc_location"/>
     </attributes>
   </classpathentry>
 </classpath>
