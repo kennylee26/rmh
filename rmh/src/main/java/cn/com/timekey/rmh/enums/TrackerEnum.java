@@ -21,11 +21,11 @@ public enum TrackerEnum {
 	/**
 	 * OT:加班
 	 */
-	OT(17),
+	OT(18), 
 	/**
-	 * CL:补休
+	 * CL:补休 
 	 */
-	CL(18);// compensated leave
+	CL(17);// compensated leave
 
 	private final int id;
 

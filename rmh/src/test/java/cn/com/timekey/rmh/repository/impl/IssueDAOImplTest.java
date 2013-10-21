@@ -52,7 +52,7 @@ public class IssueDAOImplTest {
 
 	@Test
 	public void testFindResponsibleIssues() throws Exception {
-		Date[] period = DateUtils.getDatePeriod(2013, 9);
+		Date[] period = DateUtils.getDatePeriod(2013, 10);
 		Date begin = period[0];
 		Date end = period[1];
 		List<IssueStatus> statuses = Arrays.asList(IssueStatusEnum.CLOSED

@@ -127,7 +127,7 @@ public class IssueServiceImpl implements IssueService {
 		if (isClosed != null) {
 			if (isClosed == true) {
 				// 只有已关闭状态的有用。
-				return Arrays.asList(IssueStatusEnum.CLOSED.getEntity());
+				return getClosedStatus();
 			} else {
 				issueStatuses = issueStatusDAO.findByIsClosed(isClosed);
 			}
@@ -135,10 +135,22 @@ public class IssueServiceImpl implements IssueService {
 			// 不传入isClosed表示查询全部，根据业务，可看成是查询全部非关闭的+已关闭状态的。
 			// 为了避免查询已拒绝，无效的等无用状态。by kennylee 2013-10-14
 			issueStatuses = issueStatusDAO.findByIsClosed(false);
-			issueStatuses.add(IssueStatusEnum.CLOSED.getEntity());
+			issueStatuses.addAll(getClosedStatus());
 		}
 		issueStatuses = filterIgnoreStatus(issueStatuses);
 		return issueStatuses;
+	}
+
+	/**
+	 * <p>
+	 * 算绩效的"关闭"状态
+	 * </p>
+	 * 
+	 * @return
+	 */
+	private List<IssueStatus> getClosedStatus() {
+		return Arrays.asList(IssueStatusEnum.CLOSED.getEntity(),
+				IssueStatusEnum.LEAVE.getEntity());
 	}
 
 	/**

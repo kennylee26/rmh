@@ -16,7 +16,7 @@ import cn.com.timekey.rmh.entity.IssueStatus;
  * @version 1.0.0<br/>
  */
 public enum IssueStatusEnum {
-	NEW(1), CLOSED(5), DONE(16);
+	NEW(1), CLOSED(5), DONE(16), LEAVE(19);
 
 	private final int id;
 
