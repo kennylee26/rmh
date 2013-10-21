@@ -114,14 +114,8 @@ public class IssueDAOImpl implements IssueDAO {
 		parameters.put("trackids", trackids);
 		if (issueStatuses != null) {
 			qlString += " AND i.issueStatus in ( :issueStatus ) ";
-			if(logger.isDebugEnabled()){
-				for (IssueStatus st : issueStatuses) {
-					logger.info(st.getId());
-				}
-			}
 			parameters.put("issueStatus", issueStatuses);
 		}
-		qlString += " ORDER BY i.issueStatus.isClosed ASC , i.dueDate ASC, i.startDate ASC, i.id ASC";
 		Query query = em.createQuery(qlString);
 		if (CollectionUtils.isEmpty(parameters) == false) {
 			for (Map.Entry<String, Object> e : parameters.entrySet()) {

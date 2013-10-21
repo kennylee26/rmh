@@ -25,7 +25,6 @@ public class Issue {
 	private User assignedUser;
 	private User authorUser;
 	private String statusName;
-	private Boolean isClosed;
 
 	/**
 	 * 创建一个新的实例 Issue.
@@ -52,7 +51,7 @@ public class Issue {
 	public Issue(Integer id, String createdOn, String dueDate,
 			Float estimatedHours, String startDate, String subject,
 			String updatedOn, Project project, User assignedUser,
-			User authorUser, String statusName, Boolean isClosed) {
+			User authorUser, String statusName) {
 		super();
 		this.id = id;
 		this.createdOn = createdOn;
@@ -65,7 +64,6 @@ public class Issue {
 		this.assignedUser = assignedUser;
 		this.authorUser = authorUser;
 		this.statusName = statusName;
-		this.isClosed = isClosed;
 	}
 
 	/**
@@ -268,23 +266,6 @@ public class Issue {
 				+ ", updatedOn=" + updatedOn + ", project=" + project
 				+ ", assignedUser=" + assignedUser + ", authorUser="
 				+ authorUser + ", statusName=" + statusName + "]";
-	}
-
-	/**
-	 * isClosed
-	 * 
-	 * @return the isClosed
-	 */
-	public Boolean getIsClosed() {
-		return isClosed;
-	}
-
-	/**
-	 * @param isClosed
-	 *            the isClosed to set
-	 */
-	public void setIsClosed(Boolean isClosed) {
-		this.isClosed = isClosed;
 	}
 
 }
