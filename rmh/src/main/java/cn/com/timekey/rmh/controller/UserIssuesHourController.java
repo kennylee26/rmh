@@ -47,6 +47,16 @@ public class UserIssuesHourController {
 
 	private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
+	/**
+	 * <p>
+	 * 查询某用户的本月问题列表
+	 * </p>
+	 * 
+	 * @param userid
+	 *            用户ID
+	 * @param model
+	 * @return JSP View
+	 */
 	@RequestMapping(value = "/user/spent/{userid}", method = RequestMethod.GET)
 	public String getUserHourInfo(@PathVariable("userid") String userid,
 			Model model) {
@@ -62,6 +72,17 @@ public class UserIssuesHourController {
 		return "hourinfo";
 	}
 
+	/**
+	 * <p>
+	 * 查询某用户的本月问题列表
+	 * </p>
+	 * 
+	 * @param userid
+	 *            用户id
+	 * @param type
+	 *            String 查询的问题类别。all为全部，closed为已经关闭的，否则都为查询未关闭的。
+	 * @return JSON
+	 */
 	@RequestMapping(value = "/ajax/user/work_info/{userid}")
 	public @ResponseBody
 	MonthWorkInfo getUserWorkInfo(@PathVariable("userid") String userid,

@@ -7,3 +7,4 @@
 
 /rmh/target
 /rmh/bin
+/rmh/src/main/resources/db.properties 
