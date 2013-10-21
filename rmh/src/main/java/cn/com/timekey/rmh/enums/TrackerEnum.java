@@ -14,7 +14,18 @@ package cn.com.timekey.rmh.enums;
  * @version 1.0.0<br/>
  */
 public enum TrackerEnum {
-	OTCL(16), OT(17), CL(18);// compensated leave
+	/**
+	 * OTCL:加班补休
+	 */
+	OTCL(16),
+	/**
+	 * OT:加班
+	 */
+	OT(17),
+	/**
+	 * CL:补休
+	 */
+	CL(18);// compensated leave
 
 	private final int id;
 

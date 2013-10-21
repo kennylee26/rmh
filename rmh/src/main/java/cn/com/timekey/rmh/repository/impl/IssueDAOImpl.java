@@ -98,7 +98,8 @@ public class IssueDAOImpl implements IssueDAO {
 				+ " FROM Issue i, CustomValue cv where i.id = cv.customizedId AND cv.customFieldId=6 AND i.estimatedHours !=null AND i.startDate!=null AND i.dueDate!=null";
 		qlString += " AND cv.value=:userId ";
 		List<Integer> trackids = Arrays.asList(TrackerEnum.OTCL.getId(),
-				TrackerEnum.OT.getId(), TrackerEnum.CL.getId());
+				TrackerEnum.OT.getId());
+		// trackids.add(TrackerEnum.CL.getId());//补休
 		parameters.put("userId", String.valueOf(userId));
 		if (begin != null) {
 			qlString += " AND i.startDate >= :begin";
@@ -114,7 +115,7 @@ public class IssueDAOImpl implements IssueDAO {
 		parameters.put("trackids", trackids);
 		if (issueStatuses != null) {
 			qlString += " AND i.issueStatus in ( :issueStatus ) ";
-			if(logger.isDebugEnabled()){
+			if (logger.isDebugEnabled()) {
 				for (IssueStatus st : issueStatuses) {
 					logger.info(st.getId());
 				}
