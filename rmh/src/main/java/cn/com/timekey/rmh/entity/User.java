@@ -20,7 +20,7 @@ public class User implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 
-	private byte admin;
+	private Integer admin;
 
 	@Column(name="auth_source_id")
 	private Integer authSourceId;
@@ -62,13 +62,9 @@ public class User implements Serializable {
 	@Column(name="updated_on")
 	private Date updatedOn;
 
-	//bi-directional many-to-one association to Issue
-	@OneToMany(mappedBy="assignedUser")
-	private List<Issue> asignedIssue;
-
-	//bi-directional many-to-one association to Issue
-	@OneToMany(mappedBy="authorUser")
-	private List<Issue> authorIssue;
+	//bi-directional many-to-one association to Member
+	@OneToMany(mappedBy="user")
+	private List<Member> members;
 
 	public User() {
 	}
@@ -81,11 +77,11 @@ public class User implements Serializable {
 		this.id = id;
 	}
 
-	public byte getAdmin() {
+	public Integer getAdmin() {
 		return this.admin;
 	}
 
-	public void setAdmin(byte admin) {
+	public void setAdmin(Integer admin) {
 		this.admin = admin;
 	}
 
@@ -209,63 +205,26 @@ public class User implements Serializable {
 		this.updatedOn = updatedOn;
 	}
 
-	public List<Issue> getAsignedIssue() {
-		return this.asignedIssue;
+	public List<Member> getMembers() {
+		return this.members;
 	}
 
-	public void setAsignedIssue(List<Issue> asignedIssue) {
-		this.asignedIssue = asignedIssue;
+	public void setMembers(List<Member> members) {
+		this.members = members;
 	}
 
-	public Issue addAsignedIssue(Issue asignedIssue) {
-		getAsignedIssue().add(asignedIssue);
-		asignedIssue.setAssignedUser(this);
+	public Member addMember(Member member) {
+		getMembers().add(member);
+		member.setUser(this);
 
-		return asignedIssue;
+		return member;
 	}
 
-	public Issue removeAsignedIssue(Issue asignedIssue) {
-		getAsignedIssue().remove(asignedIssue);
-		asignedIssue.setAssignedUser(null);
+	public Member removeMember(Member member) {
+		getMembers().remove(member);
+		member.setUser(null);
 
-		return asignedIssue;
-	}
-
-	public List<Issue> getAuthorIssue() {
-		return this.authorIssue;
-	}
-
-	public void setAuthorIssue(List<Issue> authorIssue) {
-		this.authorIssue = authorIssue;
-	}
-
-	public Issue addAuthorIssue(Issue authorIssue) {
-		getAuthorIssue().add(authorIssue);
-		authorIssue.setAuthorUser(this);
-
-		return authorIssue;
-	}
-
-	public Issue removeAuthorIssue(Issue authorIssue) {
-		getAuthorIssue().remove(authorIssue);
-		authorIssue.setAuthorUser(null);
-
-		return authorIssue;
-	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", admin=" + admin + ", authSourceId="
-				+ authSourceId + ", createdOn=" + createdOn + ", firstname="
-				+ firstname + ", hashedPassword=" + hashedPassword
-				+ ", identityUrl=" + identityUrl + ", language=" + language
-				+ ", lastLoginOn=" + lastLoginOn + ", lastname=" + lastname
-				+ ", login=" + login + ", mail=" + mail + ", mailNotification="
-				+ mailNotification + ", salt=" + salt + ", status=" + status
-				+ ", type=" + type + ", updatedOn=" + updatedOn + "]";
+		return member;
 	}
 
 }

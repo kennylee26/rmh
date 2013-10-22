@@ -5,44 +5,43 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-
 /**
  * The persistent class for the projects database table.
  * 
  */
 @Entity
-@Table(name="projects")
-@NamedQuery(name="Project.findAll", query="SELECT p FROM Project p")
+@Table(name = "projects")
+@NamedQuery(name = "Project.findAll", query = "SELECT p FROM Project p")
 public class Project implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="created_on")
+	@Column(name = "created_on")
 	private Date createdOn;
 
 	@Lob
 	private String description;
 
 	@Lob
-	@Column(name="dmsf_description")
+	@Column(name = "dmsf_description")
 	private String dmsfDescription;
 
 	private String homepage;
 
 	private String identifier;
 
-	@Column(name="is_public")
+	@Column(name = "is_public")
 	private byte isPublic;
 
 	private Integer lft;
 
 	private String name;
 
-	@Column(name="parent_id")
+	@Column(name = "parent_id")
 	private Integer parentId;
 
 	private Integer rgt;
@@ -50,12 +49,12 @@ public class Project implements Serializable {
 	private Integer status;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="updated_on")
+	@Column(name = "updated_on")
 	private Date updatedOn;
 
-	//bi-directional many-to-one association to Issue
-	@OneToMany(mappedBy="project")
-	private List<Issue> issues;
+	// bi-directional many-to-one association to Member
+	@OneToMany(mappedBy = "project")
+	private List<Member> members;
 
 	public Project() {
 	}
@@ -164,29 +163,31 @@ public class Project implements Serializable {
 		this.updatedOn = updatedOn;
 	}
 
-	public List<Issue> getIssues() {
-		return this.issues;
+	public List<Member> getMembers() {
+		return this.members;
 	}
 
-	public void setIssues(List<Issue> issues) {
-		this.issues = issues;
+	public void setMembers(List<Member> members) {
+		this.members = members;
 	}
 
-	public Issue addIssue(Issue issue) {
-		getIssues().add(issue);
-		issue.setProject(this);
+	public Member addMember(Member member) {
+		getMembers().add(member);
+		member.setProject(this);
 
-		return issue;
+		return member;
 	}
 
-	public Issue removeIssue(Issue issue) {
-		getIssues().remove(issue);
-		issue.setProject(null);
+	public Member removeMember(Member member) {
+		getMembers().remove(member);
+		member.setProject(null);
 
-		return issue;
+		return member;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

@@ -13,6 +13,9 @@
 		<class>cn.com.timekey.rmh.entity.IssueStatus</class>
 		<class>cn.com.timekey.rmh.entity.Tracker</class>
 		<class>cn.com.timekey.rmh.entity.Project</class>
+		<class>cn.com.timekey.rmh.entity.MemberRole</class>
+		<class>cn.com.timekey.rmh.entity.Member</class>
+		<class>cn.com.timekey.rmh.entity.Role</class>
 		<properties>
 			<property name="hibernate.hbm2ddl.auto" value="none" />
 			<property name="hibernate.show_sql" value="true" />
