@@ -4,6 +4,9 @@
  */
 package cn.com.timekey.rmh.vo;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * <b>类名称：</b>Issue<br/>
  * <b>类描述：</b>Issue的的VO类<br/>
@@ -14,6 +17,10 @@ package cn.com.timekey.rmh.vo;
  * @version 1.0.0<br/>
  */
 public class Issue {
+
+	private static final SimpleDateFormat sdf = new SimpleDateFormat(
+			"yyyy-MM-dd");
+
 	private Integer id;
 	private String createdOn;
 	private String dueDate;
@@ -26,6 +33,10 @@ public class Issue {
 	private User authorUser;
 	private String statusName;
 	private Boolean isClosed;
+	/**
+	 * responsibleUser:责任人
+	 */
+	private User responsibleUser;
 
 	/**
 	 * 创建一个新的实例 Issue.
@@ -48,6 +59,8 @@ public class Issue {
 	 * @param assignedUser
 	 * @param authorUser
 	 * @param statusName
+	 * @param isClosed
+	 * 
 	 */
 	public Issue(Integer id, String createdOn, String dueDate,
 			Float estimatedHours, String startDate, String subject,
@@ -66,6 +79,69 @@ public class Issue {
 		this.authorUser = authorUser;
 		this.statusName = statusName;
 		this.isClosed = isClosed;
+	}
+
+	/**
+	 * <p>
+	 * new <code>cn.com.timekey.rmh.vo.Issue</code> from
+	 * <code>cn.com.timekey.rmh.entity.Issue</code>
+	 * </p>
+	 * 
+	 * @param po
+	 *            cn.com.timekey.rmh.entity.Issue
+	 * @return cn.com.timekey.rmh.vo.Issue
+	 */
+	public static Issue newInstance(cn.com.timekey.rmh.entity.Issue po) {
+		String createOn = format(po.getCreatedOn());
+		String dueDate = format(po.getDueDate());
+		String updatedOn = format(po.getUpdatedOn());
+		String startDate = format(po.getStartDate());
+		cn.com.timekey.rmh.vo.Issue is = new cn.com.timekey.rmh.vo.Issue(
+				po.getId(), createOn, dueDate, po.getEstimatedHours(),
+				startDate, po.getSubject(), updatedOn, Project.newInstance(po
+						.getProject().getId(), po.getProject().getIdentifier(),
+						po.getProject().getName()), User.newInstance(po
+						.getAssignedUser().getId(), po.getAssignedUser()
+						.getFirstname() + po.getAssignedUser().getLastname()),
+				User.newInstance(po.getAuthorUser().getId(), po.getAuthorUser()
+						.getFirstname() + po.getAuthorUser().getLastname()), po
+						.getIssueStatus().getName(), po.getIssueStatus()
+						.getIsClosed() != 0);
+		return is;
+	}
+
+	/**
+	 * <p>
+	 * new <code>cn.com.timekey.rmh.vo.Issue</code> from
+	 * <code>cn.com.timekey.rmh.entity.Issue</code>
+	 * </p>
+	 * 
+	 * @param po
+	 *            cn.com.timekey.rmh.entity.Issue
+	 * @param respUser
+	 *            责任人
+	 * @return cn.com.timekey.rmh.vo.Issue
+	 */
+	public static Issue newInstance(cn.com.timekey.rmh.entity.Issue po,
+			cn.com.timekey.rmh.entity.User respUser) {
+		cn.com.timekey.rmh.vo.Issue is = newInstance(po);
+		is.setResponsibleUser(cn.com.timekey.rmh.vo.User.newInstance(
+				respUser.getId(),
+				respUser.getFirstname() + respUser.getLastname()));
+		return is;
+	}
+
+	/**
+	 * <p>
+	 * Date 转 string
+	 * </p>
+	 * 
+	 * @param sdf
+	 * @param issue
+	 * @return String 日期格式的字符串
+	 */
+	private static String format(Date date) {
+		return date != null ? sdf.format(date) : "";
 	}
 
 	/**
@@ -285,6 +361,23 @@ public class Issue {
 	 */
 	public void setIsClosed(Boolean isClosed) {
 		this.isClosed = isClosed;
+	}
+
+	/**
+	 * responsibleUser
+	 * 
+	 * @return the responsibleUser
+	 */
+	public User getResponsibleUser() {
+		return responsibleUser;
+	}
+
+	/**
+	 * @param responsibleUser
+	 *            the responsibleUser to set
+	 */
+	public void setResponsibleUser(User responsibleUser) {
+		this.responsibleUser = responsibleUser;
 	}
 
 }

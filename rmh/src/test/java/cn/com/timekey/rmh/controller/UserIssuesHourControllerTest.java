@@ -55,7 +55,7 @@ public class UserIssuesHourControllerTest {
 		ResultActions ra = this.mockMvc.perform(MockMvcRequestBuilders
 				.get("/ajax/user/work_info/3")
 				//.accept(MediaType.APPLICATION_JSON).param("page", "1")
-				.param("type", "all"));
+				.param("type", "all").param("month", "10"));
 		MvcResult mr = ra.andReturn();
 		String result = mr.getResponse().getContentAsString();
 		logger.info(result);

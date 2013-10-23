@@ -4,12 +4,12 @@
  */
 package cn.com.timekey.rmh.controller;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -19,14 +19,11 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.com.timekey.rmh.entity.Issue;
 import cn.com.timekey.rmh.service.IssueService;
 import cn.com.timekey.rmh.vo.MonthWorkInfo;
-import cn.com.timekey.rmh.vo.Project;
-import cn.com.timekey.rmh.vo.User;
 
 /**
  * <b>类名称：</b>UserIssuesHourController<br/>
@@ -44,8 +41,6 @@ public class UserIssuesHourController {
 	private IssueService issueService;
 
 	private final Log logger = LogFactory.getLog(getClass());
-
-	private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
 	/**
 	 * <p>
@@ -81,15 +76,39 @@ public class UserIssuesHourController {
 	 *            用户id
 	 * @param type
 	 *            String 查询的问题类别。all为全部，closed为已经关闭的，否则都为查询未关闭的。
+	 * @param year
+	 *            String 年份
+	 * @param month
+	 *            String 月份 1月份为1，2月份为2，如此类推。
 	 * @return JSON
 	 */
 	@RequestMapping(value = "/ajax/user/work_info/{userid}", method = RequestMethod.GET)
 	public @ResponseBody
 	MonthWorkInfo getUserWorkInfo(@PathVariable("userid") String userid,
-			@RequestParam("type") String type) {
+			HttpServletRequest request) {
 		logger.debug("UserIssuesHourController.getUserHourInfo()");
-		MonthWorkInfo workInfo = issueService.getNewestWorkInfoByUserId(Integer
-				.valueOf(userid));
+		String type = request.getParameter("type");
+		MonthWorkInfo workInfo = getWorkInfo(userid,
+				request.getParameter("year"), request.getParameter("month"));
+		logger.debug("isClosed: " + issueType(type));
+		List<Issue> issues = issueService.findIssuesByResponsible(
+				workInfo.getUserId(), workInfo.getYear(), workInfo.getMonth(),
+				issueType(type));
+		if (CollectionUtils.isEmpty(issues) == false) {
+			setIssueList(workInfo, issues);
+		}
+		return workInfo;
+	}
+
+	/**
+	 * <p>
+	 * 查询的问题的状态
+	 * </p>
+	 * 
+	 * @param type
+	 * @return
+	 */
+	private Boolean issueType(String type) {
 		Boolean isClosed = false;// 默认显示未关闭的
 		if (type != null) {
 			if (type.equalsIgnoreCase("all")) {
@@ -98,12 +117,41 @@ public class UserIssuesHourController {
 				isClosed = true;
 			}
 		}
-		logger.debug("isClosed: " + isClosed);
-		List<Issue> issues = issueService.findIssuesByResponsible(
-				workInfo.getUserId(), workInfo.getYear(), workInfo.getMonth(),
-				isClosed);
-		if (CollectionUtils.isEmpty(issues) == false) {
-			setIssueList(workInfo, issues);
+		return isClosed;
+	}
+
+	/**
+	 * <p>
+	 * 查询指定条件的工作信息
+	 * </p>
+	 * 
+	 * @param userid
+	 *            用户id
+	 * @param year
+	 *            年份
+	 * @param month
+	 *            月份
+	 * @return MonthWorkInfo 基础的MonthWorkInfo对象
+	 */
+	private MonthWorkInfo getWorkInfo(String userid, String year, String month) {
+		MonthWorkInfo workInfo = null;
+		if (year == null && month == null) {
+			workInfo = issueService.getNewestWorkInfoByUserId(Integer
+					.valueOf(userid));
+		} else {
+			Calendar cal = Calendar.getInstance();
+			int y = cal.get(Calendar.YEAR);
+			int m = cal.get(Calendar.MONTH) + 1;
+			try {
+				if (year != null)
+					y = Integer.valueOf(year);
+				if (month != null)
+					m = Integer.valueOf(month);
+			} catch (NumberFormatException e) {
+				logger.warn(e.getMessage());
+			}
+			workInfo = issueService.getWorkInfoByUserId(
+					Integer.valueOf(userid), y, m);
 		}
 		return workInfo;
 	}
@@ -123,39 +171,10 @@ public class UserIssuesHourController {
 				issues.size());
 		workInfo.setIssues(l);
 		for (Issue issue : issues) {
-			String createOn = format(issue.getCreatedOn());
-			String dueDate = format(issue.getDueDate());
-			String updatedOn = format(issue.getUpdatedOn());
-			String startDate = format(issue.getStartDate());
-			cn.com.timekey.rmh.vo.Issue is = new cn.com.timekey.rmh.vo.Issue(
-					issue.getId(), createOn, dueDate,
-					issue.getEstimatedHours(), startDate, issue.getSubject(),
-					updatedOn, Project.newInstance(issue.getProject().getId(),
-							issue.getProject().getIdentifier(), issue
-									.getProject().getName()), User.newInstance(
-							issue.getAssignedUser().getId(), issue
-									.getAssignedUser().getFirstname()
-									+ issue.getAssignedUser().getLastname()),
-					User.newInstance(issue.getAuthorUser().getId(), issue
-							.getAuthorUser().getFirstname()
-							+ issue.getAuthorUser().getLastname()), issue
-							.getIssueStatus().getName(), issue.getIssueStatus()
-							.getIsClosed() != 0);
+			cn.com.timekey.rmh.vo.Issue is = cn.com.timekey.rmh.vo.Issue
+					.newInstance(issue);
 			l.add(is);
 		}
-	}
-
-	/**
-	 * <p>
-	 * Date 转 string
-	 * </p>
-	 * 
-	 * @param sdf
-	 * @param issue
-	 * @return String 日期格式的字符串
-	 */
-	private String format(Date date) {
-		return date != null ? sdf.format(date) : "";
 	}
 
 }

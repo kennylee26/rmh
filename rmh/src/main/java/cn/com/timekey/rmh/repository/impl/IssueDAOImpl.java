@@ -111,7 +111,6 @@ public class IssueDAOImpl implements IssueDAO {
 		}
 		qlString += " AND NOT EXISTS ( FROM Issue t WHERE t.parentId = i.id) ";
 		qlString += " AND i.trackerId NOT IN (:trackids) ";// 过滤不用显示的问题类型
-		logger.debug("trackids: " + trackids);
 		parameters.put("trackids", trackids);
 		if (issueStatuses != null) {
 			qlString += " AND i.issueStatus in ( :issueStatus ) ";

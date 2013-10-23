@@ -4,6 +4,8 @@
  */
 package cn.com.timekey.rmh.repository.impl;
 
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -19,10 +21,15 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import cn.com.timekey.rmh.entity.Issue;
+import cn.com.timekey.rmh.entity.IssueStatus;
 import cn.com.timekey.rmh.entity.Project;
 import cn.com.timekey.rmh.entity.Role;
 import cn.com.timekey.rmh.entity.User;
+import cn.com.timekey.rmh.enums.IssueStatusEnum;
+import cn.com.timekey.rmh.repository.IssueStatusDAO;
 import cn.com.timekey.rmh.repository.ProjectDAO;
+import cn.com.timekey.rmh.utils.DateUtils;
 
 /**
  * <b>类名称：</b>ProjectDAOImplTest<br/>
@@ -43,9 +50,11 @@ public class ProjectDAOImplTest {
 
 	@Resource
 	private ProjectDAO projectDAO;
+	@Resource
+	private IssueStatusDAO issueStatusDAO;
 
 	@Test
-	public void testFindByMemberRole() throws Exception {
+	public void testFindByUserAndRole() throws Exception {
 		User user = new User();
 		user.setId(3);
 		Role role = new Role();
@@ -55,5 +64,40 @@ public class ProjectDAOImplTest {
 		for (Project project : l) {
 			logger.info(project.getName());
 		}
+	}
+
+	@Test
+	public void testFindIssues() throws Exception {
+		Project project = new Project();
+		project.setId(153);
+		Date[] period = DateUtils.getDatePeriod(2013, 10);
+		Date begin = period[0];
+		Date end = period[1];
+		List<IssueStatus> issueStatuses = issueStatusDAO.findByIsClosed(false);
+		List<Object[]> l = projectDAO.findIssues(project, begin, end,
+				issueStatuses);
+		Assert.assertFalse(CollectionUtils.isEmpty(l));
+		for (Object[] objs : l) {
+			Issue issue = (Issue) objs[0];
+			User user = (User) objs[1];
+			logger.info(issue.getSubject() + ": " + user.getFirstname()
+					+ user.getLastname() + ","
+					+ issue.getIssueStatus().getName());
+		}
+	}
+
+	@Test
+	public void testGetTotalEstimatedHours() throws Exception {
+		Project project = new Project();
+		project.setId(153);
+		Date[] period = DateUtils.getDatePeriod(2013, 9);
+		Date begin = period[0];
+		Date end = period[1];
+		List<IssueStatus> issueStatuses = Arrays.asList(IssueStatusEnum.CLOSED
+				.getEntity());
+		Double d = projectDAO.getTotalEstimatedHours(project, begin, end,
+				issueStatuses);
+		Assert.assertNotNull(d);
+		logger.info(d);
 	}
 }

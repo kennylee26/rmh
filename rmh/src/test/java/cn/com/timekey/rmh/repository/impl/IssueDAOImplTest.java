@@ -26,6 +26,7 @@ import cn.com.timekey.rmh.entity.Issue;
 import cn.com.timekey.rmh.entity.IssueStatus;
 import cn.com.timekey.rmh.enums.IssueStatusEnum;
 import cn.com.timekey.rmh.repository.IssueDAO;
+import cn.com.timekey.rmh.repository.IssueStatusDAO;
 import cn.com.timekey.rmh.utils.DateUtils;
 
 /**
@@ -45,6 +46,8 @@ public class IssueDAOImplTest {
 
 	@Resource
 	private IssueDAO issueDAO;
+	@Resource
+	private IssueStatusDAO issueStatusDAO;
 
 	private final Log logger = LogFactory.getLog(getClass());
 
@@ -78,4 +81,5 @@ public class IssueDAOImplTest {
 		Assert.assertNotNull(d);
 		logger.info("Total EstimatedHours: " + d);
 	}
+
 }
