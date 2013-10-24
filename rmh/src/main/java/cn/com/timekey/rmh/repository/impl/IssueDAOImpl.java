@@ -23,6 +23,7 @@ import org.springframework.util.CollectionUtils;
 
 import cn.com.timekey.rmh.entity.Issue;
 import cn.com.timekey.rmh.entity.IssueStatus;
+import cn.com.timekey.rmh.entity.User;
 import cn.com.timekey.rmh.enums.TrackerEnum;
 import cn.com.timekey.rmh.repository.IssueDAO;
 
@@ -56,6 +57,47 @@ public class IssueDAOImpl implements IssueDAO {
 				issueStatuses, projection);
 		@SuppressWarnings("unchecked")
 		List<Issue> l = query.getResultList();
+		return l;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * cn.com.timekey.rmh.repository.IssueDAO#findByManagerUser(cn.com.timekey
+	 * .rmh.entity.User, java.util.Date, java.util.Date, java.util.List)
+	 */
+	@Override
+	public List<Object[]> findByManagerUser(User user, Date begin, Date end,
+			List<IssueStatus> issueStatuses) {
+		EntityManager em = EntityManagerFactoryUtils
+				.getTransactionalEntityManager(emf);
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		String qlString = "SELECT p,i,u FROM Issue i, User u, CustomValue cv , Project p left join p.members members WHERE i.id = cv.customizedId AND cv.customFieldId=6 AND cv.value=u.id AND i.project = p AND members.user =:user AND members.memberRole.role.id=3 AND p.status not in (5) ";
+		parameters.put("user", user);
+		if (begin != null) {
+			qlString += " AND i.startDate >= :begin";
+			parameters.put("begin", begin);
+		}
+		if (end != null) {
+			qlString += " AND i.dueDate < :end";
+			parameters.put("end", end);
+		}
+		if (issueStatuses != null) {
+			qlString += " AND i.issueStatus in ( :issueStatus ) ";
+			parameters.put("issueStatus", issueStatuses);
+		}
+		qlString += " AND NOT EXISTS ( FROM Issue t WHERE t.parentId = i.id) ";// 加了比较慢
+
+		qlString += " ORDER BY i.issueStatus.isClosed ASC , i.dueDate ASC, i.startDate ASC, i.id ASC";
+		Query query = em.createQuery(qlString);
+		if (CollectionUtils.isEmpty(parameters) == false) {
+			for (Map.Entry<String, Object> e : parameters.entrySet()) {
+				query.setParameter(e.getKey(), e.getValue());
+			}
+		}
+		@SuppressWarnings("unchecked")
+		List<Object[]> l = query.getResultList();
 		return l;
 	}
 

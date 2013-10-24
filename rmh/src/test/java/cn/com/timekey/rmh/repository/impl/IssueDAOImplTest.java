@@ -24,6 +24,8 @@ import org.springframework.util.CollectionUtils;
 
 import cn.com.timekey.rmh.entity.Issue;
 import cn.com.timekey.rmh.entity.IssueStatus;
+import cn.com.timekey.rmh.entity.Project;
+import cn.com.timekey.rmh.entity.User;
 import cn.com.timekey.rmh.enums.IssueStatusEnum;
 import cn.com.timekey.rmh.repository.IssueDAO;
 import cn.com.timekey.rmh.repository.IssueStatusDAO;
@@ -80,6 +82,26 @@ public class IssueDAOImplTest {
 				.getTotalEstimatedHours(userId, begin, end, statuses);
 		Assert.assertNotNull(d);
 		logger.info("Total EstimatedHours: " + d);
+	}
+
+	@Test
+	public void testFindByManagerUser() throws Exception {
+		Date[] period = DateUtils.getDatePeriod(2013, 10);
+		Date begin = period[0];
+		Date end = period[1];
+		List<IssueStatus> issueStatuses = Arrays.asList(IssueStatusEnum.CLOSED.getEntity());
+		User user = new User();
+		user.setId(3);
+		List<Object[]> l = issueDAO.findByManagerUser(user, begin, end,
+				issueStatuses);
+		Assert.assertFalse(CollectionUtils.isEmpty(l));
+		for (Object[] objs : l) {
+			Project project = (Project) objs[0];
+			Issue issue = (Issue) objs[1];
+			User respUser = (User) objs[2];
+			logger.info(project.getName() + ":" + issue.getSubject() + ", 负责人 "
+					+ respUser.getFirstname() + respUser.getLastname());
+		}
 	}
 
 }

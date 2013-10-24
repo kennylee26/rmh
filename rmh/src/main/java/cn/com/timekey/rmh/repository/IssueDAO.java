@@ -9,6 +9,7 @@ import java.util.List;
 
 import cn.com.timekey.rmh.entity.Issue;
 import cn.com.timekey.rmh.entity.IssueStatus;
+import cn.com.timekey.rmh.entity.User;
 
 /**
  * <b>类名称：</b>IssueDAO<br/>
@@ -55,5 +56,23 @@ public interface IssueDAO {
 	 * @return Double 符合条件的问题的estimatedHours的总和。
 	 */
 	public Double getTotalEstimatedHours(int userId, Date begin, Date end,
+			List<IssueStatus> issueStatuses);
+	
+	/**
+	 * <p>
+	 * 查找项目中的问题
+	 * </p>
+	 * 
+	 * @param project
+	 *            Project 项目
+	 * @param begin
+	 *            开始日期
+	 * @param end
+	 *            结束日期
+	 * @param issueStatuses
+	 *            问题的状态
+	 * @return List 结果组合，0为issue，1为user
+	 */
+	public List<Object[]> findByManagerUser(User user, Date begin, Date end,
 			List<IssueStatus> issueStatuses);
 }

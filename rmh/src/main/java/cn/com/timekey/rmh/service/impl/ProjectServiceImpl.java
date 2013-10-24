@@ -6,8 +6,12 @@ package cn.com.timekey.rmh.service.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -78,49 +82,108 @@ public class ProjectServiceImpl implements ProjectService {
 	public List<ProjectIssueInfo> findManaProjectInfo(User user, int year,
 			int month) {
 		List<ProjectIssueInfo> result = new ArrayList<ProjectIssueInfo>();
-		List<Project> projects = this.findManaProjects(user);
 		Date[] period = DateUtils.getDatePeriod(year, month);
 		Date begin = period[0];
 		Date end = period[1];
-		List<IssueStatus> uncloseIssueStatus = new ArrayList<IssueStatus>();
+		List<IssueStatus> allUsefulStatus = new ArrayList<IssueStatus>();
 		for (IssueStatus i : issueStatusDAO.findByIsClosed(false)) {
 			if (i.getId().equals(IssueStatusEnum.NEW.getId()) == false) {
-				uncloseIssueStatus.add(i);
+				allUsefulStatus.add(i);
 			}
 		}
-		if (CollectionUtils.isEmpty(projects) == false) {
-			List<IssueStatus> allStatus = new ArrayList<IssueStatus>(
-					uncloseIssueStatus);
-			allStatus.add(IssueStatusEnum.CLOSED.getEntity());
-			for (Project prj : projects) {
-				List<Object[]> objs = projectDAO.findIssues(prj, begin, end,
-						uncloseIssueStatus);
-				if (CollectionUtils.isEmpty(objs) == false) {
-					List<cn.com.timekey.rmh.vo.Issue> is = new ArrayList<cn.com.timekey.rmh.vo.Issue>(
-							objs.size());
-					ProjectIssueInfo instance = new ProjectIssueInfo();
+		allUsefulStatus.add(IssueStatusEnum.CLOSED.getEntity());
+		// List<Project> projects = this.findManaProjects(user);
+		List<Object[]> projectIssues = issueDAO.findByManagerUser(user, begin,
+				end, allUsefulStatus);
+
+		if (CollectionUtils.isEmpty(projectIssues) == false) {
+			Map<Integer, ProjectIssueInfo> m = new HashMap<Integer, ProjectIssueInfo>();
+			for (Object[] objs : projectIssues) {
+				Project prj = (Project) objs[0];
+				Issue issue = (Issue) objs[1];
+				User respUser = (User) objs[2];
+				ProjectIssueInfo instance = m.get(prj.getId());
+				if (instance == null) {
+					instance = new ProjectIssueInfo();
 					instance.setProject(cn.com.timekey.rmh.vo.Project
 							.newInstance(prj.getId(), prj.getIdentifier(),
 									prj.getName()));
 					instance.setMonth(month);
 					instance.setYear(year);
-					instance.setMonthPlaningTime(projectDAO
-							.getTotalEstimatedHours(prj, begin, end, allStatus));
-					instance.setMonthFinishedTime(projectDAO.getTotalEstimatedHours(
-							prj, begin, end,
-							Arrays.asList(IssueStatusEnum.CLOSED.getEntity())));
+					List<cn.com.timekey.rmh.vo.Issue> is = new ArrayList<cn.com.timekey.rmh.vo.Issue>(
+							projectIssues.size());
 					instance.setIssues(is);
-					for (Object[] obj : objs) {
-						Issue issue = (Issue) obj[0];
-						User respUser = (User) obj[1];
-						cn.com.timekey.rmh.vo.Issue i = cn.com.timekey.rmh.vo.Issue
-								.newInstance(issue, respUser);
-						is.add(i);
-					}
+					m.put(prj.getId(), instance);
 					result.add(instance);
 				}
+				instance.setMonthPlaningTime(instance.getMonthPlaningTime()
+						+ issue.getEstimatedHours());
+				if (issue.getIssueStatus().getId()
+						.equals(IssueStatusEnum.CLOSED.getId())) {
+					instance.setMonthFinishedTime(instance
+							.getMonthFinishedTime() + issue.getEstimatedHours());
+				}
+
+				cn.com.timekey.rmh.vo.Issue i = cn.com.timekey.rmh.vo.Issue
+						.newInstance(issue, respUser);
+				instance.getIssues().add(i);
 			}
+			m = null;
 		}
+		sortProjectIssueInfo(result);
 		return result;
+	}
+
+	/**
+	 * <p>
+	 * 项目排序
+	 * </p>
+	 * 
+	 * @param result
+	 */
+	private void sortProjectIssueInfo(List<ProjectIssueInfo> result) {
+		if (CollectionUtils.isEmpty(result) == false) {
+			Collections.sort(result, new Comparator<ProjectIssueInfo>() {
+				@Override
+				public int compare(ProjectIssueInfo o1, ProjectIssueInfo o2) {
+					return o1.getProject().getId()
+							.compareTo(o2.getProject().getId());
+				}
+			});
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * cn.com.timekey.rmh.service.ProjectService#getTotalEstimatedHours(cn.com
+	 * .timekey.rmh.entity.Project, java.util.Date, java.util.Date,
+	 * java.lang.Boolean)
+	 */
+	@Override
+	public double getTotalEstimatedHours(Project project, Integer year,
+			Integer month, Boolean isClosed) {
+		Date begin = null;
+		Date end = null;
+		if (year != null && month != null) {
+			Date[] period = DateUtils.getDatePeriod(year, month);
+			begin = period[0];
+			end = period[1];
+		}
+		List<IssueStatus> issueStatuses = null;
+		if (isClosed != null) {
+			if (isClosed == true) {
+				issueStatuses = Arrays.asList(IssueStatusEnum.CLOSED
+						.getEntity());
+			} else {
+				issueStatuses = issueStatusDAO.findByIsClosed(isClosed);
+			}
+		} else {
+			issueStatuses = issueStatusDAO.findByIsClosed(false);
+			issueStatuses.add(IssueStatusEnum.CLOSED.getEntity());
+		}
+		return projectDAO.getTotalEstimatedHours(project, begin, end,
+				issueStatuses);
 	}
 }

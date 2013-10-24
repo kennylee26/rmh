@@ -63,15 +63,19 @@ public class ProjectServiceImplTest {
 		List<ProjectIssueInfo> l = projectService.findManaProjectInfo(user,
 				2013, 10);
 		Assert.assertFalse(CollectionUtils.isEmpty(l));
+		int count = 0;
 		for (ProjectIssueInfo project : l) {
 			logger.info("--------");
-			logger.info(project.getProject().getName() + " 问题列表: ");
+			logger.info(project.getProject().getName() + ", id "
+					+ project.getProject().getId() + " 问题列表: ");
 			for (Issue i : project.getIssues()) {
 				logger.info(i.getSubject() + ", 责任人: "
 						+ i.getResponsibleUser().getName() + ", 状态: "
 						+ i.getStatusName());
 			}
 			logger.info("--------");
+			count += project.getIssues().size();
 		}
+		logger.info("total: " + count);
 	}
 }

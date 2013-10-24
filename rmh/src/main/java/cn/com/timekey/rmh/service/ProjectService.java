@@ -50,4 +50,19 @@ public interface ProjectService {
 	 */
 	public List<ProjectIssueInfo> findManaProjectInfo(User user, int year,
 			int month);
+
+	/**
+	 * <p>
+	 * 查询项目的总预计时间
+	 * </p>
+	 * 
+	 * @param project
+	 * @param year Integer
+	 * @param month Integer
+	 * @param isClosed
+	 * @return double 总预计时间
+	 */
+	public double getTotalEstimatedHours(Project project, Integer year, Integer month,
+			Boolean isClosed);
+
 }
