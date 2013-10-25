@@ -235,8 +235,7 @@
 						<buildcommand>org.eclipse.m2e.core.maven2Builder</buildcommand> <buildcommand>org.springframework.ide.eclipse.core.springbuilder</buildcommand> 
 						</additionalBuildcommands> -->
 					<classpathContainers>
-						<classpathContainer>org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache
-							Tomcat v7.0</classpathContainer>
+						<classpathContainer>org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v7.0</classpathContainer>
 						<classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>
 						<classpathContainer>org.eclipse.jst.j2ee.internal.web.container/artifact</classpathContainer>
 					</classpathContainers>
