@@ -137,7 +137,7 @@ public class IssueDAOImpl implements IssueDAO {
 		String qlString = "";
 		qlString += "SELECT "
 				+ projection
-				+ " FROM Issue i, CustomValue cv where i.id = cv.customizedId AND cv.customFieldId=6 AND i.estimatedHours !=null AND i.startDate!=null AND i.dueDate!=null";
+				+ " FROM Issue i, CustomValue cv WHERE i.id = cv.customizedId AND cv.customFieldId=6 AND i.estimatedHours !=null AND i.startDate!=null AND i.dueDate!=null";
 		qlString += " AND cv.value=:userId ";
 		List<Integer> trackids = Arrays.asList(TrackerEnum.OTCL.getId(),
 				TrackerEnum.OT.getId());
@@ -164,6 +164,7 @@ public class IssueDAOImpl implements IssueDAO {
 			parameters.put("issueStatus", issueStatuses);
 		}
 		qlString += " ORDER BY i.issueStatus.isClosed ASC , i.dueDate ASC, i.startDate ASC, i.id ASC";
+		logger.debug(qlString);
 		Query query = em.createQuery(qlString);
 		if (CollectionUtils.isEmpty(parameters) == false) {
 			for (Map.Entry<String, Object> e : parameters.entrySet()) {

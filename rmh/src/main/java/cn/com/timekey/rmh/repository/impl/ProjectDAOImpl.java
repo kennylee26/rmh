@@ -69,9 +69,13 @@ public class ProjectDAOImpl extends AbstractRepository implements ProjectDAO {
 			List<IssueStatus> issueStatuses) {
 		EntityManager em = EntityManagerFactoryUtils
 				.getTransactionalEntityManager(emf);
+		if (project.getId() == null && project.getIdentifier() != null) {
+			project = findUniqueByProperty("identifier",
+					project.getIdentifier());
+		}
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		String qlString = "";
-		qlString += "SELECT sum(i.estimatedHours) FROM Issue i where i.project = :project AND NOT EXISTS ( FROM Issue t WHERE t.parentId = i.id) ";
+		qlString += "SELECT sum(i.estimatedHours) FROM Issue i WHERE i.project = :project AND NOT EXISTS ( FROM Issue t WHERE t.parentId = i.id) ";
 		parameters.put("project", project);
 		if (begin != null) {
 			qlString += " AND i.startDate >= :begin";
@@ -163,5 +167,23 @@ public class ProjectDAOImpl extends AbstractRepository implements ProjectDAO {
 			}
 		}
 		return query;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * cn.com.timekey.rmh.repository.ProjectDAO#findUniqueByProperty(java.lang
+	 * .String, java.lang.Object)
+	 */
+	@Override
+	public Project findUniqueByProperty(String property, Object value) {
+		EntityManager em = EntityManagerFactoryUtils
+				.getTransactionalEntityManager(emf);
+		String qlString = "FROM Project model";
+		qlString += " WHERE model." + property + "=:" + property;
+		Query query = em.createQuery(qlString);
+		query.setParameter(property, value);
+		return (Project) query.getSingleResult();
 	}
 }

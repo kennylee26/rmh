@@ -89,15 +89,25 @@ public class ProjectDAOImplTest {
 	@Test
 	public void testGetTotalEstimatedHours() throws Exception {
 		Project project = new Project();
-		project.setId(153);
-		Date[] period = DateUtils.getDatePeriod(2013, 9);
-		Date begin = period[0];
-		Date end = period[1];
+		project.setIdentifier("zjbsms");
+		Date[] period = null;
+		//period = DateUtils.getDatePeriod(2013, 9);
+		Date begin = null;
+		begin = period != null ? period[0] : null;
+		Date end = null;
+		end = period != null ? period[1] : null;
 		List<IssueStatus> issueStatuses = Arrays.asList(IssueStatusEnum.CLOSED
 				.getEntity());
 		Double d = projectDAO.getTotalEstimatedHours(project, begin, end,
 				issueStatuses);
 		Assert.assertNotNull(d);
 		logger.info(d);
+	}
+
+	@Test
+	public void testFindUniqueByProperty() throws Exception {
+		Project p = projectDAO.findUniqueByProperty("identifier", "qygaweb");
+		Assert.assertNotNull(p);
+		logger.info(p.getId());
 	}
 }

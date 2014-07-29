@@ -40,7 +40,7 @@ public interface ProjectDAO {
 	 * </p>
 	 * 
 	 * @param project
-	 *            项目
+	 *            查询的目标项目实体查询例子。可包含id或者identifier字段。
 	 * @param begin
 	 *            开始日期
 	 * @param end
@@ -69,4 +69,17 @@ public interface ProjectDAO {
 	 */
 	public List<Object[]> findIssues(Project project, Date begin, Date end,
 			List<IssueStatus> issueStatuses);
+
+	/**
+	 * <p>
+	 * 根据属性名查找唯一的值
+	 * </p>
+	 * 
+	 * @param property
+	 *            属性名
+	 * @param value
+	 *            值
+	 * @return
+	 */
+	public Project findUniqueByProperty(String property, Object value);
 }
