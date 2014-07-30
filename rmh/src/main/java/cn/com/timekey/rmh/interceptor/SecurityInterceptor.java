@@ -28,7 +28,8 @@ public class SecurityInterceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler) throws Exception {
 		String remoteIp = request.getRemoteAddr();
-		if (remoteIp.equals("127.0.0.1") == false) {
+		if (remoteIp.equals("127.0.0.1") == false
+				&& remoteIp.indexOf("0:0:0:0:0:0:0:1") < 0) {
 			logger.warn("bad ip:" + remoteIp);
 			return false;
 		}

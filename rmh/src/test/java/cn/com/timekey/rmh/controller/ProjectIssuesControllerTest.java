@@ -46,12 +46,23 @@ public class ProjectIssuesControllerTest {
 		mockMvc = MockMvcBuilders.standaloneSetup(projectIssuesController)
 				.build();
 	}
+
 	private final Log logger = LogFactory.getLog(getClass());
 
 	@Test
 	public void testGetUserWorkInfo() throws Exception {
 		ResultActions ra = this.mockMvc.perform(MockMvcRequestBuilders
 				.get("/ajax/project/work_info/3"));
+		MvcResult mr = ra.andReturn();
+		String result = mr.getResponse().getContentAsString();
+		logger.info(result);
+	}
+
+	@Test
+	public void testGetTotalTime() throws Exception {
+		String identifier = "hxzk";
+		ResultActions ra = this.mockMvc.perform(MockMvcRequestBuilders
+				.get("/ajax/project/time/" + identifier));
 		MvcResult mr = ra.andReturn();
 		String result = mr.getResponse().getContentAsString();
 		logger.info(result);

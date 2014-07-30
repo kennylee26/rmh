@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.com.timekey.rmh.entity.Project;
 import cn.com.timekey.rmh.entity.User;
 import cn.com.timekey.rmh.service.ProjectService;
 import cn.com.timekey.rmh.vo.ProjectIssueInfo;
@@ -73,5 +74,17 @@ public class ProjectIssuesController {
 		List<ProjectIssueInfo> l = projectService.findManaProjectInfo(user, y,
 				m);
 		return l;
+	}
+
+	@RequestMapping(value = "/ajax/project/time/{identifier}", method = RequestMethod.GET)
+	public @ResponseBody
+	Double getTotalTime(@PathVariable("identifier") String identifier,
+			HttpServletRequest request) {
+		logger.debug("ProjectIssuesController.getTotalTime()");
+		Project project = new Project();
+		project.setIdentifier(identifier);
+		double d = projectService.getTotalEstimatedHours(project, null, null,
+				true);
+		return d;
 	}
 }
