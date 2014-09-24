@@ -4,6 +4,7 @@
  */
 package cn.com.timekey.rmh.repository.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -29,7 +30,6 @@ import cn.com.timekey.rmh.entity.User;
 import cn.com.timekey.rmh.enums.IssueStatusEnum;
 import cn.com.timekey.rmh.repository.IssueStatusDAO;
 import cn.com.timekey.rmh.repository.ProjectDAO;
-import cn.com.timekey.rmh.utils.DateUtils;
 
 /**
  * <b>类名称：</b>ProjectDAOImplTest<br/>
@@ -69,21 +69,28 @@ public class ProjectDAOImplTest {
 	@Test
 	public void testFindIssues() throws Exception {
 		Project project = new Project();
-		project.setId(153);
-		Date[] period = DateUtils.getDatePeriod(2013, 10);
-		Date begin = period[0];
-		Date end = period[1];
-		List<IssueStatus> issueStatuses = issueStatusDAO.findByIsClosed(false);
+		project.setIdentifier("zjbsms");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date begin = sdf.parse("2014-01-01");
+		Date end = new Date();
+		List<IssueStatus> issueStatuses = issueStatusDAO.findByIsClosed(true);
 		List<Object[]> l = projectDAO.findIssues(project, begin, end,
 				issueStatuses);
 		Assert.assertFalse(CollectionUtils.isEmpty(l));
+		String format = "%s: 【%s】 [责任人:%s%s, 耗时:%s, 最后更新时间:%s, 状态:%s]";
+		float total = 0f;
 		for (Object[] objs : l) {
 			Issue issue = (Issue) objs[0];
 			User user = (User) objs[1];
-			logger.info(issue.getSubject() + ": " + user.getFirstname()
-					+ user.getLastname() + ","
-					+ issue.getIssueStatus().getName());
+
+			logger.info(String.format(format, issue.getProject().getName(),
+					issue.getSubject(), user.getFirstname(),
+					user.getLastname(), String.valueOf(issue
+							.getEstimatedHours()), sdf.format(issue
+							.getUpdatedOn()), issue.getIssueStatus().getName()));
+			total += issue.getEstimatedHours();
 		}
+		logger.info("total: " + total + " hours.");
 	}
 
 	@Test
@@ -91,7 +98,7 @@ public class ProjectDAOImplTest {
 		Project project = new Project();
 		project.setIdentifier("zjbsms");
 		Date[] period = null;
-		//period = DateUtils.getDatePeriod(2013, 9);
+		// period = DateUtils.getDatePeriod(2013, 9);
 		Date begin = null;
 		begin = period != null ? period[0] : null;
 		Date end = null;

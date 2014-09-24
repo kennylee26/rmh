@@ -109,6 +109,10 @@ public class ProjectDAOImpl extends AbstractRepository implements ProjectDAO {
 	public List<Object[]> findIssues(Project project, Date begin, Date end,
 			List<IssueStatus> issueStatuses) {
 		String projection = "i,u";
+		if (project.getId() == null && project.getIdentifier() != null) {
+			project = findUniqueByProperty("identifier",
+					project.getIdentifier());
+		}
 		Query query = generateFindIssueQuery(project, begin, end,
 				issueStatuses, projection);
 		return query.getResultList();
@@ -139,7 +143,9 @@ public class ProjectDAOImpl extends AbstractRepository implements ProjectDAO {
 		String qlString = "";
 		qlString += "SELECT "
 				+ projection
-				+ " FROM Issue i,User u, CustomValue cv where i.id = cv.customizedId AND cv.customFieldId=6 AND cv.value=u.id AND i.project = :project AND NOT EXISTS ( FROM Issue t WHERE t.parentId = i.id) ";
+				+ " FROM Issue i,User u, CustomValue cv where i.id = cv.customizedId AND cv.customFieldId=6 AND cv.value=u.id AND i.project = :project ";
+		qlString += " AND i.estimatedHours IS NOT NULL ";
+		qlString += " AND NOT EXISTS ( FROM Issue t WHERE t.parentId = i.id) ";
 		parameters.put("project", project);
 		if (begin != null) {
 			qlString += " AND i.startDate >= :begin";

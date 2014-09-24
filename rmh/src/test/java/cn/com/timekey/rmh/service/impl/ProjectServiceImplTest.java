@@ -61,7 +61,7 @@ public class ProjectServiceImplTest {
 		User user = new User();
 		user.setId(3);
 		List<ProjectIssueInfo> l = projectService.findManaProjectInfo(user,
-				2013, 10);
+				2013, 12);
 		Assert.assertFalse(CollectionUtils.isEmpty(l));
 		int count = 0;
 		for (ProjectIssueInfo project : l) {

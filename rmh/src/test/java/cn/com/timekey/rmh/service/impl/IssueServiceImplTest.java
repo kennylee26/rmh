@@ -47,7 +47,7 @@ public class IssueServiceImplTest {
 
 	private final Log logger = LogFactory.getLog(getClass());
 
-	private Integer userId = 3;
+	private Integer userId = 3;//我的ID
 
 	@Test
 	public void testGetNewestWorkInfoByUserId() throws Exception {
@@ -84,8 +84,8 @@ public class IssueServiceImplTest {
 	@Test
 	public void testFindIssuesByResponsibleIntegerIntegerIntegerBoolean()
 			throws Exception {
-		Integer year = 2013;
-		Integer month = 9;
+		Integer year = 2014;
+		Integer month = 3;
 		Boolean isClosed = null;
 		List<Issue> issues = issueService.findIssuesByResponsible(userId, year,
 				month, isClosed);
@@ -101,7 +101,7 @@ public class IssueServiceImplTest {
 	@Test
 	public void testGetWorkInfoByUserIdIntegerIntegerInteger() throws Exception {
 		Integer year = 2013;
-		Integer month = 9;
+		Integer month = 12;
 		MonthWorkInfo info = issueService.getWorkInfoByUserId(userId, year,
 				month);
 		Assert.assertNotNull(info);
