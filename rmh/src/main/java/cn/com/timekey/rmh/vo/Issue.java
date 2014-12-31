@@ -101,8 +101,10 @@ public class Issue {
 				startDate, po.getSubject(), updatedOn, Project.newInstance(po
 						.getProject().getId(), po.getProject().getIdentifier(),
 						po.getProject().getName()), User.newInstance(po
-						.getAssignedUser().getId(), po.getAssignedUser()
-						.getFirstname() + po.getAssignedUser().getLastname()),
+						.getAssignedUser() != null ? po.getAssignedUser()
+						.getId() : null, po.getAssignedUser() != null ? po
+						.getAssignedUser().getFirstname()
+						+ po.getAssignedUser().getLastname() : null),
 				User.newInstance(po.getAuthorUser().getId(), po.getAuthorUser()
 						.getFirstname() + po.getAuthorUser().getLastname()), po
 						.getIssueStatus().getName(), po.getIssueStatus()
